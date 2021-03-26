@@ -93,7 +93,7 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <com.example.Mancala.BoardView
+                <Mancala.BoardView
                     android:id="@+id/GameView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
