@@ -29,7 +29,7 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     @Override
     public View getTopView() {
-        return myActivity.findViewById(R.id.GameView);
+        return myActivity.findViewById(R.id.top_gui_layout);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     public void setAsGui(GameMainActivity activity) {
         //like oncreate
         // Load the layout resource for the new configuration
-        activity.setContentView(layoutId);
+        activity.setContentView(R.layout.board_main);
 
         /*// set the surfaceView instance variable
         surfaceView = (TTTSurfaceView)myActivity.findViewById(R.id.surfaceView);
