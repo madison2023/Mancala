@@ -18,7 +18,7 @@ public class MancalaLocalGame extends LocalGame {
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-
+        p.sendInfo(new MancalaGameState(((MancalaGameState) state)));
     }
 
     @Override
