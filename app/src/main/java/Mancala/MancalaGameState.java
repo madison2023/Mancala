@@ -17,7 +17,6 @@ public class MancalaGameState extends GameState implements Serializable  {
     //stores who's turn it is
     private boolean isHumansTurn;
 
-
     private boolean rowIsEmpty; //if true game is over
 
     private int numMarbles;
@@ -146,7 +145,6 @@ public class MancalaGameState extends GameState implements Serializable  {
         }
 
     }
-
 
 
 }
