@@ -21,9 +21,15 @@ public class MancalaLocalGame extends LocalGame {
         p.sendInfo(new MancalaGameState(((MancalaGameState) state)));
     }
 
+    /**
+     *
+     * @param playerIdx
+     * 		the player's player-number (ID)
+     * @return
+     */
     @Override
     protected boolean canMove(int playerIdx) {
-        return false;
+        return playerIdx == ((MancalaGameState)state).getWhoseTurn();
     }
 
     @Override
