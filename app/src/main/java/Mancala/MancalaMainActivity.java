@@ -1,6 +1,7 @@
 //package Mancala;
 package Mancala;
 
+import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.GameMainActivity;
 import com.example.mancala.game.GameFramework.LocalGame;
 import com.example.mancala.game.GameFramework.gameConfiguration.GameConfig;
@@ -33,7 +34,7 @@ public class MancalaMainActivity extends GameMainActivity {
         playerTypes.add(new GamePlayerType("Local Human Player") {
             @Override
             public GamePlayer createPlayer(String name) {
-                return new MancalaHumanPlayer(name);
+                return new MancalaHumanPlayer(name, R.layout.activity_main); //this needs to be changed to the board_main.xml
             }
         });
 

@@ -8,52 +8,20 @@ import android.util.AttributeSet;
 import android.view.SurfaceView;
 
 public class BoardView extends SurfaceView {
-    // pocket circle radius
-    float radius = 90f;
-
-
 
     //measurements of board
-    float boardWidth = 1780.0f;
-    float boardHeight = 480.0f;
-    float boardOutterLeft = 100.0f; //spelled wrong?
-    float boardInnerLeft = 110.0f;
-    float boardOutterRight = 1900.0f;
-    float boardInnerRight = 1890.0f;
-    float boardOutterTop = 200.0f;
-    float boardInnerTop = 210.0f;
-    float boardOutterBottom = 685.0f;
-    float boardInnerBottom = 675.0f;
-    float ovalTop = 248f;
-    float ovalBottom = 637f;
-
-    //centers of Stores
-    float cxLeftStore = ((boardOutterLeft+(boardWidth/45))+(boardOutterLeft+(boardWidth/7)))/2;
-    float cyLeftStore = ((boardOutterTop+(boardHeight/10))+boardOutterBottom-(boardHeight/10))/2;
-    float cxRightStore = ((boardOutterRight-(boardWidth/45))+(boardOutterRight-boardWidth/7))/2;
-    float cyRightStore = ((boardOutterTop+(boardHeight/10))+boardOutterBottom-(boardHeight/10))/2;
-
-    //centers of Pits
-    //Player A is the bottom row Player B is top row
-    //Position A1 is the left bottom, position A6 is bottom right
-    //Position B1 is top right, position B6 is top left
-    float cxA1 = 363.78f + radius + (0*(1487.1f/7f));
-    float cxA2 = 363.78f + radius + (1*(1487.1f/7f));
-    float cxA3 = 363.78f + radius + (2*(1487.1f/7f));
-    float cxA4 = 363.78f + radius + (3*(1487.1f/7f));
-    float cxA5 = 363.78f + radius + (4*(1487.1f/7f));
-    float cxA6 = 363.78f + radius + (5*(1487.1f/7f));
-    //y for all of the A pockets
-    float cyA = ovalBottom - radius;
-
-    float cxB1 = 363.78f + radius + (5 * (1487.1f/7f));
-    float cxB2 = 363.78f + radius + (4 * (1487.1f/7f));
-    float cxB3 = 363.78f + radius + (3 * (1487.1f/7f));
-    float cxB4 = 363.78f + radius + (2 * (1487.1f/7f));
-    float cxB5 = 363.78f + radius + (1 * (1487.1f/7f));
-    float cxB6 = 363.78f + radius + (0 * (1487.1f/7f));
-    //y for all of the B pockets
-    float cyB = ovalTop + radius;
+    private final float boardWidth = 1780.0f;
+    private final float boardHeight = 480.0f;
+    private final float boardOuterLeft = 100.0f;
+    private final float boardInnerLeft = 110.0f;
+    private final float boardOuterRight = 1900.0f;
+    private final float boardInnerRight = 1890.0f;
+    private final float boardOuterTop = 200.0f;
+    private final float boardInnerTop = 210.0f;
+    private final float boardOuterBottom = 685.0f;
+    private final float boardInnerBottom = 675.0f;
+    private final float ovalTop = 248f;
+    private final float ovalBottom = 637f;
 
 
     //colors
@@ -62,6 +30,7 @@ public class BoardView extends SurfaceView {
     Paint lightBrown = new Paint();
     Paint lightBlue = new Paint();
     Paint number = new Paint();
+    Paint text = new Paint();
 
 
 
@@ -74,9 +43,12 @@ public class BoardView extends SurfaceView {
         brown.setColor(Color.rgb(117,65,45));
         lightBrown.setColor(Color.rgb(205,133,63));
         lightBlue.setColor(Color.rgb(74,164,176));
-        number.setColor(Color.WHITE);
-        number.setTextSize(45);
-
+        number.setColor(Color.BLACK);
+        number.setTextAlign(Paint.Align.CENTER);
+        number.setTextSize(28);
+        text.setColor(Color.BLACK);
+        text.setTextAlign(Paint.Align.CENTER);
+        text.setTextSize(50);
 
     }
 
@@ -89,29 +61,37 @@ public class BoardView extends SurfaceView {
     //draws marbles for each pit
     //all same distance from center of pit
     public void drawPitMarbles(float cx, float cy, int numMarbles, Canvas canvas, boolean isTopRow) {
+
+        float textCyTopRow = boardInnerTop + (3*(ovalTop-boardInnerTop)/4);
+        float textCyBottomRow = boardInnerBottom - ((boardInnerBottom-ovalBottom)/4);
+
         float radius = 50.0f;
         double angle = 0.0;
+
         for(int i = 0; i < numMarbles; i++) {
             drawMarble((float) (cx + radius*Math.cos(angle)), (float) (cy + radius*Math.sin(angle)), canvas);
             angle += 2*Math.PI/numMarbles;
         }
 
         //draw number of marbles for the pits
-        float cxNum = cx;
-        float cyNum = 0;
         if(isTopRow){
-            cyNum = cy + 120;
+            drawMarblesNumber(cx, textCyTopRow, numMarbles, canvas);
         } else{
-            cyNum = cy - 95;
+            drawMarblesNumber(cx,textCyBottomRow , numMarbles, canvas);
         }
-        drawMarblesNumber(cxNum, cyNum, numMarbles, canvas);
+
     }
 
     //spreads marbles out more since more marbles will be in the 2 stores at either end
     //uses random arrangement instead of circular
     public void drawStoreMarbles(float cx, float cy, int numMarbles, Canvas canvas, boolean isLeft) {
+        //coordinates for text
+        float textCxLeftStore = (boardInnerLeft + boardOuterLeft+(boardWidth/45))/2;
+        float textCxRightStore = (boardInnerRight + boardOuterRight-(boardWidth/45))/2;
+
         float radius = 80.0f;
         double angle = 0.0;
+
         for(int i = 0; i < numMarbles; i++) {
             float centerx = (float) (cx + radius*Math.random()*Math.cos(angle));
             float centery = (float) (cy + radius*Math.random()*Math.sin(angle));
@@ -120,14 +100,11 @@ public class BoardView extends SurfaceView {
         }
 
         //draw the number of marbles for the store
-        float cxNum = 0;
-        float cyNum = cy;
         if(isLeft){
-            cxNum = cx - 130;
+            drawMarblesNumber(textCxLeftStore,cy, numMarbles, canvas);
         } else{
-            cxNum = cx + 115;
+            drawMarblesNumber(textCxRightStore,cy, numMarbles, canvas);
         }
-        drawMarblesNumber(cxNum, cyNum, numMarbles, canvas);
     }
 
     //draw the number
@@ -135,10 +112,10 @@ public class BoardView extends SurfaceView {
         String numberStr = new Integer(numMarbles).toString();
         canvas.drawText(numberStr, cx, cy, number);
     }
-  
+
     /** draws pockets at coordinates cx and cy with specified radius */
     public void drawPocket(Canvas canvas, float cx, float cy, float radius){
-        // Outter circle
+        // Outer circle
         black.setColor(Color.BLACK);
         canvas.drawCircle(cx ,cy, radius, black);
 
@@ -147,24 +124,60 @@ public class BoardView extends SurfaceView {
         canvas.drawCircle(cx ,cy, radius - 5, lightBrown);
     }
 
+    public void drawTurnName(Canvas canvas, boolean isComputersTurn) {
+        if (isComputersTurn) {
+            canvas.drawText("Computer's Turn", boardOuterLeft + boardWidth/2, boardOuterBottom + 100, text);
+        }
+        else {
+            canvas.drawText("Your Turn", boardOuterLeft + boardWidth/2, boardOuterBottom + 100, text);
+        }
+    }
+
     /** onDraw method draws the game board and pockets. */
     public void onDraw(Canvas canvas){
 
-        float width = canvas.getWidth();
-        float height = canvas.getHeight();
+        // pocket circle radius
+        float radius = 90f;
 
+        //centers of Pits
+        //Player A is the bottom row Player B is top row
+        //Position A1 is the left bottom, position A6 is bottom right
+        //Position B1 is top right, position B6 is top left
+        float cxA1 = 363.78f + radius + (0*(1487.1f/7f));
+        float cxA2 = 363.78f + radius + (1*(1487.1f/7f));
+        float cxA3 = 363.78f + radius + (2*(1487.1f/7f));
+        float cxA4 = 363.78f + radius + (3*(1487.1f/7f));
+        float cxA5 = 363.78f + radius + (4*(1487.1f/7f));
+        float cxA6 = 363.78f + radius + (5*(1487.1f/7f));
+        //y for all of the A pockets
+        float cyA = ovalBottom - radius;
+
+        float cxB1 = 363.78f + radius + (5 * (1487.1f/7f));
+        float cxB2 = 363.78f + radius + (4 * (1487.1f/7f));
+        float cxB3 = 363.78f + radius + (3 * (1487.1f/7f));
+        float cxB4 = 363.78f + radius + (2 * (1487.1f/7f));
+        float cxB5 = 363.78f + radius + (1 * (1487.1f/7f));
+        float cxB6 = 363.78f + radius + (0 * (1487.1f/7f));
+        //y for all of the B pockets
+        float cyB = ovalTop + radius;
+
+        //centers of stores
+        float cxLeftStore = ((boardOuterLeft + (boardWidth / 45)) + (boardOuterLeft + (boardWidth / 7))) / 2;
+        float cxRightStore = ((boardOuterRight - (boardWidth / 45)) + (boardOuterRight - boardWidth / 7)) / 2;
+        float cyStore = ((boardOuterTop + (boardHeight / 10)) + boardOuterBottom - (boardHeight / 10)) / 2;
+        
 
         // Draws board
-        canvas.drawRect(boardOutterLeft,boardOutterTop,boardOutterRight, boardOutterBottom, black);
+        canvas.drawRect(boardOuterLeft,boardOuterTop,boardOuterRight, boardOuterBottom, black);
         canvas.drawRect(boardInnerLeft,boardInnerTop, boardInnerRight, boardInnerBottom, brown);
 
         // Draws left oval
-        canvas.drawOval(boardOutterLeft+(boardWidth/45), boardOutterTop+(boardHeight/10), boardOutterLeft+(boardWidth/7), boardOutterBottom-(boardHeight/10), black);
-        canvas.drawOval(boardOutterLeft+(boardWidth/40f), boardOutterTop+(boardHeight/9), boardOutterLeft+(boardWidth/7.18f), boardOutterBottom-(boardHeight/9), lightBrown);
+        canvas.drawOval(boardOuterLeft+(boardWidth/45), boardOuterTop+(boardHeight/10), boardOuterLeft+(boardWidth/7), boardOuterBottom-(boardHeight/10), black);
+        canvas.drawOval(boardOuterLeft+(boardWidth/40f), boardOuterTop+(boardHeight/9), boardOuterLeft+(boardWidth/7.18f), boardOuterBottom-(boardHeight/9), lightBrown);
 
         // Draws right oval
-        canvas.drawOval(boardOutterRight-(boardWidth/45), boardOutterTop+(boardHeight/10), boardOutterRight-(boardWidth/7), boardOutterBottom-(boardHeight/10), black);
-        canvas.drawOval(boardOutterRight-(boardWidth/40f), boardOutterTop+(boardHeight/9), boardOutterRight-(boardWidth/7.18f), boardOutterBottom-(boardHeight/9), lightBrown);
+        canvas.drawOval(boardOuterRight-(boardWidth/45), boardOuterTop+(boardHeight/10), boardOuterRight-(boardWidth/7), boardOuterBottom-(boardHeight/10), black);
+        canvas.drawOval(boardOuterRight-(boardWidth/40f), boardOuterTop+(boardHeight/9), boardOuterRight-(boardWidth/7.18f), boardOuterBottom-(boardHeight/9), lightBrown);
 
 
 
@@ -180,29 +193,34 @@ public class BoardView extends SurfaceView {
             drawPocket(canvas, cxBottom, cyBottom, radius);
         }
         //draw pit marbles for player A
-        drawPitMarbles(cxA1, cyA, 6, canvas, true);
-        drawPitMarbles(cxA2, cyA, 0, canvas, true);
-        drawPitMarbles(cxA3, cyA, 3, canvas, true);
-        drawPitMarbles(cxA4, cyA, 7, canvas, true);
-        drawPitMarbles(cxA5, cyA, 7, canvas, true);
-        drawPitMarbles(cxA6, cyA, 0, canvas, true);
+        drawPitMarbles(cxA1, cyA, 6, canvas, false);
+        drawPitMarbles(cxA2, cyA, 0, canvas, false);
+        drawPitMarbles(cxA3, cyA, 3, canvas, false);
+        drawPitMarbles(cxA4, cyA, 7, canvas, false);
+        drawPitMarbles(cxA5, cyA, 7, canvas, false);
+        drawPitMarbles(cxA6, cyA, 0, canvas, false);
 
         //draw pit marbles for player B
-        drawPitMarbles(cxB6, cyB, 0, canvas, false);
-        drawPitMarbles(cxB5, cyB, 7, canvas, false);
-        drawPitMarbles(cxB4, cyB, 3, canvas,false);
-        drawPitMarbles(cxB3, cyB, 0, canvas,false);
-        drawPitMarbles(cxB2, cyB, 0, canvas,false);
-        drawPitMarbles(cxB1, cyB, 0, canvas,false);
+        drawPitMarbles(cxB6, cyB, 0, canvas, true);
+        drawPitMarbles(cxB5, cyB, 7, canvas, true);
+        drawPitMarbles(cxB4, cyB, 3, canvas,true);
+        drawPitMarbles(cxB3, cyB, 0, canvas,true);
+        drawPitMarbles(cxB2, cyB, 0, canvas,true);
+        drawPitMarbles(cxB1, cyB, 0, canvas,true);
 
         //store marbles for player A
-        drawStoreMarbles(cxRightStore, cyRightStore, 3, canvas, false);
+        drawStoreMarbles(cxRightStore, cyStore, 3, canvas, false);
 
         //store marbles for player B
-        drawStoreMarbles(cxLeftStore, cyLeftStore, 6, canvas, true);
+        drawStoreMarbles(cxLeftStore, cyStore, 6, canvas, true);
+
+        //draw Text that says whose turn it is
+        drawTurnName(canvas, false);
 
 
     }
 
 
 }
+
+

@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Mancala</string>
+    <string name="mancala">Mancala</string>
+    <string name="quit">Quit</string>
+    <string-array name="difficulty">
+        <item>Difficulty</item>
+        <item>Easy</item>
+        <item>Hard</item>
+    </string-array>
 </resources>

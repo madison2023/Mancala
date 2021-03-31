@@ -17,6 +17,7 @@ public class MancalaGameState extends GameState implements Serializable  {
     //stores who's turn it is
     private boolean isHumansTurn;
 
+
     private boolean rowIsEmpty; //if true game is over
 
     private int numMarbles;
@@ -123,6 +124,27 @@ public class MancalaGameState extends GameState implements Serializable  {
             }
             numMarbles--;
         }
+    }
+
+    public boolean equals(Object object) {
+        if(! (object instanceof MancalaGameState)) return false;
+        MancalaGameState state = (MancalaGameState) object;
+
+
+        for(int i = 0; i< this.humanPlayer.length; i++){ //humanPlayer.length and computerPlayer.length will always be the same
+            if (this.humanPlayer[i] != state.humanPlayer[i] || this.computerPlayer[i] != state.computerPlayer[i]){
+                return false;
+            }
+        }
+
+        //initializing booleans
+        if (this.isHumansTurn != state.isHumansTurn || this.rowIsEmpty != state.rowIsEmpty || this.numMarbles != state.numMarbles) {
+            return false;
+        }
+        else {
+            return true;
+        }
+
     }
 
 
