@@ -10,71 +10,73 @@ import java.util.Arrays;
  */
 public class MancalaGameState extends GameState implements Serializable  {
     //arrays for each player will store number of marbles in the corresponding pocket
-    //ex: if humanPlayer has 4 marbles in their first pocket humanPlayer[0] = 4
-    private int[] humanPlayer;
-    private int[] computerPlayer;
+    //ex: if player0 has 4 marbles in their first pocket player0[0] = 4
+    private int[] player0;
+    private int[] player1;
 
     //stores who's turn it is
-    private boolean isHumansTurn;
+    private int whoseTurn;
 
 
-    private boolean rowIsEmpty; //if true game is over
+    //private boolean rowIsEmpty; //if true game is over
 
     private int numMarbles;
 
     //constructor for objects of class MancalaGameState
     public MancalaGameState() {
         //initializing the number of marbles in each pocket
-        humanPlayer = new int[7];
-        computerPlayer = new int[7];
+        player0 = new int[7];
+        player1 = new int[7];
         //every pocket has 4 marbles at the beginning except the store which has 1
-        for(int i = 0; i< humanPlayer.length - 1; i++){ //humanPlayer.length and computerPlayer.length will always be the same
-            humanPlayer[i] = 4;
-            computerPlayer[i] = 4;
+        for(int i = 0; i< player0.length - 1; i++){ //player0.length and player1.length will always be the same
+            player0[i] = 4;
+            player1[i] = 4;
         }
-        humanPlayer[humanPlayer.length - 1] = 0;
-        computerPlayer[computerPlayer.length - 1] = 0;
+        player0[player0.length - 1] = 0;
+        player1[player1.length - 1] = 0;
 
         //initializing booleans
-        isHumansTurn = true;
-        rowIsEmpty = false;
+//        isHumansTurn = true;
+//        rowIsEmpty = false;
+        whoseTurn = 0;
     }
 
     //copy Constructor
     public MancalaGameState(MancalaGameState original)
     {
-        humanPlayer = new int[7];
-        computerPlayer = new int[7];
-        for(int i = 0; i< humanPlayer.length; i++){ //humanPlayer.length and computerPlayer.length will always be the same
-            humanPlayer[i] = original.humanPlayer[i];
-            computerPlayer[i] = original.computerPlayer[i];
+        player0 = new int[7];
+        player1 = new int[7];
+        for(int i = 0; i< player0.length; i++){ //player0.length and player1.length will always be the same
+            player0[i] = original.player0[i];
+            player1[i] = original.player1[i];
         }
 
         //initializing booleans
-        isHumansTurn = original.isHumansTurn;
-        rowIsEmpty = original.rowIsEmpty;
+        /*isHumansTurn = original.isHumansTurn;
+        rowIsEmpty = original.rowIsEmpty;*/
+        whoseTurn = original.whoseTurn;
 
     }
 
     @Override
     public String toString(){
-        return "\nComputer Player's Pockets: " + Arrays.toString(computerPlayer) + "\nHuman Player's Pockets: "
-                + Arrays.toString(humanPlayer) + "\nisHumansTurn = " + isHumansTurn + "\nrowIsEmpty = " + rowIsEmpty + "\nNumMarbles: " + numMarbles + "\n";
+        return "\nComputer Player's Pockets: " + Arrays.toString(player1) + "\nHuman Player's Pockets: "
+                + Arrays.toString(player0) + "Whose turn: " + whoseTurn + "\nNumMarbles: " + numMarbles + "\n";
     }
 
 
-
+//"\nisHumansTurn = " + isHumansTurn + "\nrowIsEmpty = " + rowIsEmpty +
 
 
     public boolean selectPit(int row, int col) { //columns labeled 0-6, where 0 is the first pocket and 6 is the store
-        if(isHumansTurn) {
-            if(row == 1 && humanPlayer[col] != 0 && col != 6) { //cant make a move from an empty pit, one that isn't yours, or your store
+        if(whoseTurn == 0) {  //human
+            if(row == 1 && player0[col] != 0 && col != 6) { //cant make a move from an empty pit, one that isn't yours, or your store
                 //set selected pit to zero
-                numMarbles = humanPlayer[col];
-                humanPlayer[col] = 0;
+                numMarbles = player0[col];
+                player0[col] = 0;
                 //add one marble to each pit while there are still marbles going into other array if necessary
-                addMarblesToHuman(col+1);
-                isHumansTurn = !isHumansTurn; //next player's turn
+                addMarblesToPlayer0(col+1);
+                //isHumansTurn = !isHumansTurn; //next player's turn
                 return true;
             }
             else {
@@ -82,13 +84,13 @@ public class MancalaGameState extends GameState implements Serializable  {
             }
         }
         else {
-            if (row == 1 && computerPlayer[col] != 0 && col != 6) { //cant make a move from an empty pit, one that isn't yours, or your store
+            if (row == 1 && player1[col] != 0 && col != 6) { //cant make a move from an empty pit, one that isn't yours, or your store
                 //set selected pit to zero
-                numMarbles = computerPlayer[col];
-                computerPlayer[col] = 0;
+                numMarbles = player1[col];
+                player1[col] = 0;
                 //add one marble to each pit while there are still marbles going into other array if necessary
-                addMarblesToComputer(col+1);
-                isHumansTurn = !isHumansTurn;
+                addMarblesToPlayer1(col+1);
+                //isHumansTurn = !isHumansTurn;
                 return true;
             } else {
                 return false;
@@ -96,29 +98,29 @@ public class MancalaGameState extends GameState implements Serializable  {
         }
     }
 
-    public void addMarblesToHuman(int col){
+    public void addMarblesToPlayer0(int col){
         while(numMarbles > 0) {
             //second half of this if statement is making sure we don't add a marble to the wrong players store
-            if(col != humanPlayer.length && !(col == 6 && !isHumansTurn)) {
-                humanPlayer[col] += 1;
+            if(col != player0.length && !(col == 6 && whoseTurn == 1)) {
+                player0[col] += 1;
                 col++;
             }
             else {
-                addMarblesToComputer( 0);//would start at the beginning of the marbles array
+                addMarblesToPlayer1( 0);//would start at the beginning of the marbles array
                 return;
             }
             numMarbles--;
         }
     }
 
-    public void addMarblesToComputer(int col) {
+    public void addMarblesToPlayer1 (int col) {
         while(numMarbles > 0) {
-            if(col != computerPlayer.length && !(col == 6 && isHumansTurn)) {
-                computerPlayer[col] += 1;
+            if(col != player1.length && !(col == 6 && whoseTurn == 0)) {
+                player1[col] += 1;
                 col++;
             }
             else {
-                addMarblesToHuman(0); //would start at the beginning of the human array
+                addMarblesToPlayer0(0); //would start at the beginning of the human array
                 return;
 
             }
@@ -131,14 +133,14 @@ public class MancalaGameState extends GameState implements Serializable  {
         MancalaGameState state = (MancalaGameState) object;
 
 
-        for(int i = 0; i< this.humanPlayer.length; i++){ //humanPlayer.length and computerPlayer.length will always be the same
-            if (this.humanPlayer[i] != state.humanPlayer[i] || this.computerPlayer[i] != state.computerPlayer[i]){
+        for(int i = 0; i< this.player0.length; i++){ //player0.length and player1.length will always be the same
+            if (this.player0[i] != state.player0[i] || this.player1[i] != state.player1[i]){
                 return false;
             }
         }
 
         //initializing booleans
-        if (this.isHumansTurn != state.isHumansTurn || this.rowIsEmpty != state.rowIsEmpty || this.numMarbles != state.numMarbles) {
+        if (this.whoseTurn != state.whoseTurn || this.numMarbles != state.numMarbles) {
             return false;
         }
         else {
@@ -147,11 +149,21 @@ public class MancalaGameState extends GameState implements Serializable  {
 
     }
 
-    public int[] getHumanPlayer() {
-        return humanPlayer;
+    public int[] getPlayer0() {
+        return player0;
     }
 
-    public int[] getComputerPlayer() {
-        return computerPlayer;
+    public int[] getPlayer1() {
+        return player1;
+    }
+
+
+
+    public int getWhoseTurn() {
+        return whoseTurn;
+    }
+
+    public void setWhoseTurn(int whoseTurn) {
+        this.whoseTurn = whoseTurn;
     }
 }

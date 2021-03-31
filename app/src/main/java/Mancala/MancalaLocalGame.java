@@ -33,6 +33,28 @@ public class MancalaLocalGame extends LocalGame {
 
     @Override
     protected boolean makeMove(GameAction action) {
-        return false;
+        MancalaMoveAction mancalaMoveAction = (MancalaMoveAction) action;
+        MancalaGameState state = (MancalaGameState) super.state;
+
+        int row = mancalaMoveAction.getRow();
+        int col = mancalaMoveAction.getCol();
+
+
+        //int playerId = getPlayerIdx(mancalaMoveAction.getPlayer());
+
+        int whoseTurn = state.getWhoseTurn();
+
+        if(whoseTurn == 0 && col == 1){
+            return false;
+        }
+        else if (whoseTurn == 1 && col == 0) {
+            return false;
+        }
+
+        state.selectPit(row,col);
+        state.setWhoseTurn(1- whoseTurn);
+
+
+        return true;
     }
 }

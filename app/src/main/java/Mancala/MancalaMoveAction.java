@@ -5,7 +5,7 @@ package Mancala;
 import com.example.mancala.game.GameFramework.players.GamePlayer;
 import com.example.mancala.game.GameFramework.actionMessage.GameAction;
 
-public class MoveAction extends GameAction{
+public class MancalaMoveAction extends GameAction{
 
     private int row;
     private int col;
@@ -15,7 +15,7 @@ public class MoveAction extends GameAction{
      *
      * @param player the player who created the action
      */
-    public MoveAction(GamePlayer player, int row, int col) {
+    public MancalaMoveAction(GamePlayer player, int row, int col) {
         super(player);
 
         this.row = Math.max(0, Math.min(2, row));
