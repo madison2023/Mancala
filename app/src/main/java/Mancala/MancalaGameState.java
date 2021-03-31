@@ -146,5 +146,11 @@ public class MancalaGameState extends GameState implements Serializable  {
 
     }
 
+    public int[] getHumanPlayer() {
+        return humanPlayer;
+    }
 
+    public int[] getComputerPlayer() {
+        return computerPlayer;
+    }
 }
