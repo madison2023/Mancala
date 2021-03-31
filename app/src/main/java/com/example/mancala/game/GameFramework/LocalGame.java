@@ -101,7 +101,7 @@ public abstract class LocalGame implements Game, Tickable {
             if (running) return;
             running = true; // mark as running
 
-            // create a thread that loops, waiting for actions;
+            // create a thread that loops, waiting for Mancala.actions;
             // start the thread
             Runnable runnable = new Runnable() {
                 public void run() {

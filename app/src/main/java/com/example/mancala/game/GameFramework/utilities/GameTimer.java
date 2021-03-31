@@ -3,7 +3,7 @@ package com.example.mancala.game.GameFramework.utilities;
 /**
  * A GameTimer is an object that sends a GameTimerAction to a Game or a
  * Player at regular intervals.  It can be used, for example, in games
- * where players have deadlines for performing certain actions (e.g., chess
+ * where players have deadlines for performing certain Mancala.actions (e.g., chess
  * clock, 24-second clock in a basketball simultation).<P>
  *
  * Each LocalGame, HumanPlayer and ComputerPlayer has a GameTimer created
@@ -27,7 +27,7 @@ package com.example.mancala.game.GameFramework.utilities;
 public class GameTimer {
     //Tag for logging
     private static final String TAG = "GameTimer";
-    // the game to send actions to
+    // the game to send Mancala.actions to
     private Tickable target;
 
     // the number of ticks since timer was created (or last reset)

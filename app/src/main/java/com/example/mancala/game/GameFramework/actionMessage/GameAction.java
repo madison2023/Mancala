@@ -10,7 +10,7 @@ import com.example.mancala.game.GameFramework.players.GamePlayer;
  * tic-tac-toe square).  The game will then decide whether the player is
  * allowed to perform that action before effecting the action on the
  * players behalf.  Most real games will subclass GameAction to define
- * actions that are relevant to the particular game.  A GameAction contains
+ * Mancala.actions that are relevant to the particular game.  A GameAction contains
  * the player as part of its state; this way the game always knows what
  * player sent it the action.
  * <P>
