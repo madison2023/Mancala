@@ -1,6 +1,4 @@
-package Mancala;
-
-
+package com.example.mancala.game.GameFramework.actionMessage;
 
 import com.example.mancala.game.GameFramework.players.GamePlayer;
 import com.example.mancala.game.GameFramework.actionMessage.GameAction;
