@@ -41,13 +41,13 @@ public class MancalaLocalGame extends LocalGame {
         int humanRowValue = 0;
 
         int[] temp = state.getPlayer0();
-        int computerStoreValue = temp[7]; // set computer score
+        int computerStoreValue = temp[6]; // set computer score
         for (int i = 0; i < temp.length - 1; i++) {
             computerRowValue = temp[i] + computerRowValue;
         }
 
         temp = state.getPlayer1();
-        int humanStoreValue = temp[7]; // set human score
+        int humanStoreValue = temp[6]; // set human score
         for (int i = 0; i < temp.length - 1; i++) {
             humanRowValue = temp[i] + humanRowValue;
         }
@@ -75,15 +75,19 @@ public class MancalaLocalGame extends LocalGame {
         //int playerId = getPlayerIdx(mancalaMoveAction.getPlayer());
 
         int whoseTurn = state.getWhoseTurn();
+        int[] player0 = state.getPlayer0();
+        int[] player1 = state.getPlayer1();
 
-        if(whoseTurn == 0 && col == 1){
+        if (whoseTurn == 0 && (row == 1 || player0[col] == 0 || col == 6)) {
             return false;
         }
-        else if (whoseTurn == 1 && col == 0) {
+        else if (whoseTurn == 1 && (row == 0 || player1[col] == 0 || col == 6)) {
             return false;
         }
+
 
         state.selectPit(row,col);
+        //figure out a way to give the player another turn if necessary
         state.setWhoseTurn(1- whoseTurn);
 
 

@@ -18,8 +18,8 @@ public class MancalaMoveAction extends GameAction{
     public MancalaMoveAction(GamePlayer player, int row, int col) {
         super(player);
 
-        this.row = Math.max(0, Math.min(2, row));
-        this.col = Math.max(0, Math.min(2, col));
+        this.row = row;//Math.max(0, Math.min(2, row));
+        this.col = col;//Math.max(0, Math.min(2, col));
     }
 
     public int getRow() {

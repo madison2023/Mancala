@@ -4,10 +4,16 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 
-public class BoardView extends SurfaceView {
+import com.example.mancala.game.GameFramework.utilities.FlashSurfaceView;
+
+public class BoardView extends FlashSurfaceView {
+
+    // pocket circle radius
+    private float radius = 90f;
 
     //measurements of board
     private final float boardWidth = 1780.0f;
@@ -23,6 +29,27 @@ public class BoardView extends SurfaceView {
     private final float ovalTop = 248f;
     private final float ovalBottom = 637f;
 
+    //centers of Pits
+    //Player A is the bottom row Player B is top row
+    //Position A1 is the left bottom, position A6 is bottom right
+    //Position B1 is top right, position B6 is top left
+    float cxA1 = 363.78f + radius + (0*(1487.1f/7f));
+    float cxA2 = 363.78f + radius + (1*(1487.1f/7f));
+    float cxA3 = 363.78f + radius + (2*(1487.1f/7f));
+    float cxA4 = 363.78f + radius + (3*(1487.1f/7f));
+    float cxA5 = 363.78f + radius + (4*(1487.1f/7f));
+    float cxA6 = 363.78f + radius + (5*(1487.1f/7f));
+    //y for all of the A pockets
+    float cyA = ovalBottom - radius;
+
+    float cxB1 = 363.78f + radius + (5 * (1487.1f/7f));
+    float cxB2 = 363.78f + radius + (4 * (1487.1f/7f));
+    float cxB3 = 363.78f + radius + (3 * (1487.1f/7f));
+    float cxB4 = 363.78f + radius + (2 * (1487.1f/7f));
+    float cxB5 = 363.78f + radius + (1 * (1487.1f/7f));
+    float cxB6 = 363.78f + radius + (0 * (1487.1f/7f));
+    //y for all of the B pockets
+    float cyB = ovalTop + radius;
 
     //colors
     Paint black = new Paint();
@@ -31,6 +58,9 @@ public class BoardView extends SurfaceView {
     Paint lightBlue = new Paint();
     Paint number = new Paint();
     Paint text = new Paint();
+
+    private MancalaGameState state;
+
 
 
 
@@ -133,33 +163,15 @@ public class BoardView extends SurfaceView {
         }
     }
 
+
+
     /** onDraw method draws the game board and pockets. */
     public void onDraw(Canvas canvas){
 
-        // pocket circle radius
-        float radius = 90f;
+        /*// pocket circle radius
+        float radius = 90f;*/
 
-        //centers of Pits
-        //Player A is the bottom row Player B is top row
-        //Position A1 is the left bottom, position A6 is bottom right
-        //Position B1 is top right, position B6 is top left
-        float cxA1 = 363.78f + radius + (0*(1487.1f/7f));
-        float cxA2 = 363.78f + radius + (1*(1487.1f/7f));
-        float cxA3 = 363.78f + radius + (2*(1487.1f/7f));
-        float cxA4 = 363.78f + radius + (3*(1487.1f/7f));
-        float cxA5 = 363.78f + radius + (4*(1487.1f/7f));
-        float cxA6 = 363.78f + radius + (5*(1487.1f/7f));
-        //y for all of the A pockets
-        float cyA = ovalBottom - radius;
 
-        float cxB1 = 363.78f + radius + (5 * (1487.1f/7f));
-        float cxB2 = 363.78f + radius + (4 * (1487.1f/7f));
-        float cxB3 = 363.78f + radius + (3 * (1487.1f/7f));
-        float cxB4 = 363.78f + radius + (2 * (1487.1f/7f));
-        float cxB5 = 363.78f + radius + (1 * (1487.1f/7f));
-        float cxB6 = 363.78f + radius + (0 * (1487.1f/7f));
-        //y for all of the B pockets
-        float cyB = ovalTop + radius;
 
         //centers of stores
         float cxLeftStore = ((boardOuterLeft + (boardWidth / 45)) + (boardOuterLeft + (boardWidth / 7))) / 2;
@@ -192,35 +204,98 @@ public class BoardView extends SurfaceView {
             float cyBottom = ovalBottom - radius;
             drawPocket(canvas, cxBottom, cyBottom, radius);
         }
+
+        if(state == null) {
+            state = new MancalaGameState();
+        }
+
+        int[] player0 = state.getPlayer0();
+        int[] player1 = state.getPlayer1();
+
         //draw pit marbles for player A
-        drawPitMarbles(cxA1, cyA, 6, canvas, false);
-        drawPitMarbles(cxA2, cyA, 0, canvas, false);
-        drawPitMarbles(cxA3, cyA, 3, canvas, false);
-        drawPitMarbles(cxA4, cyA, 7, canvas, false);
-        drawPitMarbles(cxA5, cyA, 7, canvas, false);
-        drawPitMarbles(cxA6, cyA, 0, canvas, false);
+        drawPitMarbles(cxA1, cyA, player0[0], canvas, false);
+        drawPitMarbles(cxA2, cyA, player0[1], canvas, false);
+        drawPitMarbles(cxA3, cyA, player0[2], canvas, false);
+        drawPitMarbles(cxA4, cyA, player0[3], canvas, false);
+        drawPitMarbles(cxA5, cyA, player0[4], canvas, false);
+        drawPitMarbles(cxA6, cyA, player0[5], canvas, false);
 
         //draw pit marbles for player B
-        drawPitMarbles(cxB6, cyB, 0, canvas, true);
-        drawPitMarbles(cxB5, cyB, 7, canvas, true);
-        drawPitMarbles(cxB4, cyB, 3, canvas,true);
-        drawPitMarbles(cxB3, cyB, 0, canvas,true);
-        drawPitMarbles(cxB2, cyB, 0, canvas,true);
-        drawPitMarbles(cxB1, cyB, 0, canvas,true);
+        drawPitMarbles(cxB6, cyB, player1[5], canvas, true);
+        drawPitMarbles(cxB5, cyB, player1[4], canvas, true);
+        drawPitMarbles(cxB4, cyB, player1[3], canvas,true);
+        drawPitMarbles(cxB3, cyB, player1[2], canvas,true);
+        drawPitMarbles(cxB2, cyB, player1[1], canvas,true);
+        drawPitMarbles(cxB1, cyB, player1[0], canvas,true);
 
         //store marbles for player A
-        drawStoreMarbles(cxRightStore, cyStore, 3, canvas, false);
+        drawStoreMarbles(cxRightStore, cyStore, player0[6], canvas, false);
 
         //store marbles for player B
-        drawStoreMarbles(cxLeftStore, cyStore, 6, canvas, true);
+        drawStoreMarbles(cxLeftStore, cyStore, player1[6], canvas, true);
 
         //draw Text that says whose turn it is
-        drawTurnName(canvas, false);
-
-
+        if (state.getWhoseTurn() == 0) {
+            drawTurnName(canvas, false);  //need to figure out if whoseTurn actually keeps track of this right
+        }
+        else {
+            drawTurnName(canvas, true);
+        }
     }
 
 
+    public void setState(MancalaGameState state) {
+        this.state = state;
+    }
+
+    private boolean checkPointInCircle(float x,float y, float cx, float cy) {
+        //using equation (x-a)^2+(y-b)^2 == r^2 where (a,b) is the center of the circle
+
+        return (x - cx) * (x - cx) + (y - cy) * (y - cy) <= radius*radius;
+    }
+
+    public Point mapPixelToPit(float x, float y) { //implement this, might need to be changed to ints
+        //row 0 is bottom row
+        if (checkPointInCircle(x,y,cxA1,cyA)) {
+            return new Point(0,0);
+        }
+        else if (checkPointInCircle(x,y,cxA2,cyA)) {
+            return new Point(0,1);
+        }
+        else if (checkPointInCircle(x,y,cxA3,cyA)) {
+            return new Point(0,2);
+        }
+        else if (checkPointInCircle(x,y,cxA4,cyA)) {
+            return new Point(0,3);
+        }
+        else if (checkPointInCircle(x,y,cxA5,cyA)) {
+            return new Point(0,4);
+        }
+        else if (checkPointInCircle(x,y,cxA6,cyA)) {
+            return new Point(0,5);
+        }
+        else if (checkPointInCircle(x,y,cxB1,cyB)) {
+            return new Point(1,1);
+        }
+        else if (checkPointInCircle(x,y,cxB2,cyB)) {
+            return new Point(1,2);
+        }
+        else if (checkPointInCircle(x,y,cxB3,cyB)) {
+            return new Point(1,3);
+        }
+        else if (checkPointInCircle(x,y,cxB4,cyB)) {
+            return new Point(1,4);
+        }
+        else if (checkPointInCircle(x,y,cxB5,cyB)) {
+            return new Point(1,5);
+        }
+        else if (checkPointInCircle(x,y,cxB6,cyB)) {
+            return new Point(1,6);
+        }
+        else {
+            return null;
+        }
+    }
 }
 
 
