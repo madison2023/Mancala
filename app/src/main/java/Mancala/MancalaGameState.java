@@ -22,6 +22,9 @@ public class MancalaGameState extends GameState implements Serializable  {
 
     private int numMarbles;
 
+    private int lastRow;
+    private int lastCol;
+
     //constructor for objects of class MancalaGameState
     public MancalaGameState() {
         //initializing the number of marbles in each pocket
@@ -35,10 +38,9 @@ public class MancalaGameState extends GameState implements Serializable  {
         player0[player0.length - 1] = 0;
         player1[player1.length - 1] = 0;
 
-        //initializing booleans
-//        isHumansTurn = true;
-//        rowIsEmpty = false;
+
         whoseTurn = 0;
+
     }
 
     //copy Constructor
@@ -51,17 +53,19 @@ public class MancalaGameState extends GameState implements Serializable  {
             player1[i] = original.player1[i];
         }
 
-        //initializing booleans
-        /*isHumansTurn = original.isHumansTurn;
-        rowIsEmpty = original.rowIsEmpty;*/
+
         whoseTurn = original.whoseTurn;
+        lastCol = original.lastCol;
+        lastRow = original.lastRow;
+        numMarbles = original.numMarbles;
 
     }
 
     @Override
     public String toString(){
         return "\nComputer Player's Pockets: " + Arrays.toString(player1) + "\nHuman Player's Pockets: "
-                + Arrays.toString(player0) + "Whose turn: " + whoseTurn + "\nNumMarbles: " + numMarbles + "\n";
+                + Arrays.toString(player0) + "Whose turn: " + whoseTurn + "\nNumMarbles: " + numMarbles + "\nLast Column: "
+                    + lastCol + "\nLast Row: " + lastRow;
     }
 
 
@@ -104,7 +108,12 @@ public class MancalaGameState extends GameState implements Serializable  {
     public void addMarblesToPlayer0(int col){
         while(numMarbles > 0) {
             //second half of this if statement is making sure we don't add a marble to the wrong players store
+
             if(col != player0.length && !(col == 6 && whoseTurn == 1)) {
+                if(numMarbles == 1) {
+                    lastRow = 0;
+                    lastCol = col;
+                }
                 player0[col] += 1;
                 col++;
             }
@@ -119,6 +128,10 @@ public class MancalaGameState extends GameState implements Serializable  {
     public void addMarblesToPlayer1 (int col) {
         while(numMarbles > 0) {
             if(col != player1.length && !(col == 6 && whoseTurn == 0)) {
+                if(numMarbles == 1) {
+                    lastRow = 1;
+                    lastCol = col;
+                }
                 player1[col] += 1;
                 col++;
             }
@@ -129,6 +142,22 @@ public class MancalaGameState extends GameState implements Serializable  {
             }
             numMarbles--;
         }
+    }
+
+    public void capture(int row, int col) {
+        int oppRow = 1 - row; //opponents row that we are capturing from
+        int oppCol = Math.abs(col - 5); //opponents column
+        if(oppRow == 0) {
+            int marbles = player0[oppCol];
+            player0[oppCol] = 0;
+            player1[6] += marbles;
+        }
+        else if(oppRow == 1){
+            int marbles = player1[oppCol];
+            player1[oppCol] = 0;
+            player0[6] += marbles;
+        }
+
     }
 
     public boolean equals(Object object) {
@@ -142,8 +171,8 @@ public class MancalaGameState extends GameState implements Serializable  {
             }
         }
 
-        //initializing booleans
-        if (this.whoseTurn != state.whoseTurn || this.numMarbles != state.numMarbles) {
+
+        if (this.whoseTurn != state.whoseTurn || this.numMarbles != state.numMarbles || this.lastRow != state.lastRow || this.lastCol != state.lastCol) {
             return false;
         }
         else {
@@ -161,7 +190,6 @@ public class MancalaGameState extends GameState implements Serializable  {
     }
 
 
-
     public int getWhoseTurn() {
         return whoseTurn;
     }
@@ -169,4 +197,15 @@ public class MancalaGameState extends GameState implements Serializable  {
     public void setWhoseTurn(int whoseTurn) {
         this.whoseTurn = whoseTurn;
     }
+
+
+    public int getLastRow() {
+        return lastRow;
+    }
+
+
+    public int getLastCol() {
+        return lastCol;
+    }
+
 }

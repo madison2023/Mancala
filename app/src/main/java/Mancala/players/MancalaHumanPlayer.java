@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.GameMainActivity;
@@ -24,16 +25,23 @@ import Mancala.MancalaMoveAction;
 import static java.lang.Thread.sleep;
 
 public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
-    //private int layoutId;
+
     private BoardView boardView;
+    private TextView whoseTurnTextView;
     /**
      * constructor
      *
      * @param name the name of the player
      */
-    public MancalaHumanPlayer(String name, int layoutId) {
+    public MancalaHumanPlayer(String name) {
         super(name);
-        //this.layoutId = layoutId;
+
+    }
+
+    @Override
+    protected void initAfterReady() {
+        super.initAfterReady();
+        whoseTurnTextView.setText(allPlayerNames[0]);
     }
 
     @Override
@@ -46,14 +54,16 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         if (boardView == null) return;
 
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
-            // if the move was out of turn or otherwise illegal, flash the screen
+            // flashing screen for an illegal move
             boardView.flash(Color.RED, 50);
         }
-        if (!(info instanceof MancalaGameState))
-            // if we do not have a TTTState, ignore
+        if (!(info instanceof MancalaGameState)) {
             return;
+        }
         else {
-            boardView.setState((MancalaGameState)info);
+            MancalaGameState mancalaGameState = (MancalaGameState)info;
+            boardView.setState(mancalaGameState);
+            whoseTurnTextView.setText(allPlayerNames[mancalaGameState.getWhoseTurn()] + "'s Turn");
             boardView.invalidate();
             //Logger.log(TAG, "receiving");
         }
@@ -62,8 +72,6 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     @Override
     public void setAsGui(GameMainActivity activity) {
         //like oncreate
-        // Load the layout resource for the new configuration
-        //activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         activity.setContentView(R.layout.board_main);
 
 
@@ -77,6 +85,7 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         boardView = myActivity.findViewById(R.id.GameView);
         Logger.log("set listener","OnTouch");
         boardView.setOnTouchListener(this);
+        this.whoseTurnTextView     = (TextView)myActivity.findViewById(R.id.whoseTurnTextView);
     }
 
     @Override
