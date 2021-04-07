@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 
 import Mancala.MancalaGameState;
 import Mancala.MancalaMainActivity;
+import Mancala.MancalaMoveAction;
 
 @RunWith(RobolectricTestRunner.class)
 public class MancalaTests {
@@ -28,6 +29,19 @@ public class MancalaTests {
         MancalaGameState copyState = new MancalaGameState(MancalaState);
         assertTrue("Copy Constructor did not produce equal States", MancalaState.equals(copyState));
     }
+
+    @Test
+    public void capture(){
+        MancalaGameState MancalaState = new MancalaGameState();
+        int[] player0 = MancalaState.getPlayer0();
+        int[] player1 = MancalaState.getPlayer1();
+        player0[3]=1;
+        MancalaState.capture(0,3);
+        assertEquals(player0[6],5);
+        assertEquals(player0[3],0);
+        assertEquals(player1[2],0);
+    }
+
 
 
 }

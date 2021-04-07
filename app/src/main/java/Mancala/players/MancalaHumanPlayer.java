@@ -38,11 +38,11 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     }
 
-    @Override
+    /*@Override
     protected void initAfterReady() {
         super.initAfterReady();
-        whoseTurnTextView.setText(allPlayerNames[0]);
-    }
+        //whoseTurnTextView.setText(allPlayerNames[0]);
+    }*/
 
     @Override
     public View getTopView() {

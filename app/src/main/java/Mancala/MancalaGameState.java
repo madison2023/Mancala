@@ -150,12 +150,14 @@ public class MancalaGameState extends GameState implements Serializable  {
         if(oppRow == 0) {
             int marbles = player0[oppCol];
             player0[oppCol] = 0;
-            player1[6] += marbles;
+            player1[col] = 0;
+            player1[6] += marbles + 1;
         }
         else if(oppRow == 1){
             int marbles = player1[oppCol];
             player1[oppCol] = 0;
-            player0[6] += marbles;
+            player0[col] = 0;
+            player0[6] += marbles + 1;
         }
 
     }

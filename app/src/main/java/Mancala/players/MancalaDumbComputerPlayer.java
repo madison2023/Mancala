@@ -51,6 +51,7 @@ public class MancalaDumbComputerPlayer extends GameComputerPlayer {
 
             // register action
             MancalaMoveAction action = new MancalaMoveAction(this, this.playerNum, pitNumber);
+            //sleep(500);
             game.sendAction(action);
 
         }
