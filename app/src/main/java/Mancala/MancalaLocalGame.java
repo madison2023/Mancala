@@ -74,7 +74,6 @@ public class MancalaLocalGame extends LocalGame {
         int row = mancalaMoveAction.getRow();
         int col = mancalaMoveAction.getCol();
 
-        //int playerId = getPlayerIdx(mancalaMoveAction.getPlayer());
 
         int whoseTurn = state.getWhoseTurn();
         int[] player0 = state.getPlayer0();
@@ -90,14 +89,16 @@ public class MancalaLocalGame extends LocalGame {
         state.selectPit(row,col);
 
         //captures marbles if you land in an empty store and the opponent has marble in the opposite pocket
-        if(whoseTurn == 0 && state.getLastRow() == 0 && player0[state.getLastCol()] == 1 && player1[state.getLastCol()] != 0) {
+        if(whoseTurn == 0 && state.getLastRow() == 0 && player0[state.getLastCol()] == 1
+                && player1[Math.abs(state.getLastCol()-5)] > 0 && state.getLastCol() != 6) {
             state.capture(state.getLastRow(),state.getLastCol());
         }
-        else if(whoseTurn == 1 && state.getLastRow() == 1 && player1[state.getLastCol()] == 1 && player0[state.getLastCol()] != 0) {
+        else if(whoseTurn == 1 && state.getLastRow() == 1 && player1[state.getLastCol()] == 1
+                && player0[Math.abs(state.getLastCol()-5)] > 0 && state.getLastCol() != 6) {
             state.capture(state.getLastRow(),state.getLastCol());
         }
 
-        //give the player another turn if necessary
+        //switch whose turn it is if we don't need to give the player another turn
         if(!(state.getLastCol() == 6 && state.getLastRow() == whoseTurn)) {
             state.setWhoseTurn(1 - whoseTurn);
         }

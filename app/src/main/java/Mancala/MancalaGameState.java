@@ -147,13 +147,12 @@ public class MancalaGameState extends GameState implements Serializable  {
     public void capture(int row, int col) {
         int oppRow = 1 - row; //opponents row that we are capturing from
         int oppCol = Math.abs(col - 5); //opponents column
-        if(oppRow == 0) {
+        if (oppRow == 0) {
             int marbles = player0[oppCol];
             player0[oppCol] = 0;
             player1[col] = 0;
             player1[6] += marbles + 1;
-        }
-        else if(oppRow == 1){
+        } else if (oppRow == 1) {
             int marbles = player1[oppCol];
             player1[oppCol] = 0;
             player0[col] = 0;

@@ -276,22 +276,22 @@ public class BoardView extends FlashSurfaceView {
             return new Point(0,5);
         }
         else if (checkPointInCircle(x,y,cxB1,cyB)) {
-            return new Point(1,1);
+            return new Point(1,0);
         }
         else if (checkPointInCircle(x,y,cxB2,cyB)) {
-            return new Point(1,2);
+            return new Point(1,1);
         }
         else if (checkPointInCircle(x,y,cxB3,cyB)) {
-            return new Point(1,3);
+            return new Point(1,2);
         }
         else if (checkPointInCircle(x,y,cxB4,cyB)) {
-            return new Point(1,4);
+            return new Point(1,3);
         }
         else if (checkPointInCircle(x,y,cxB5,cyB)) {
-            return new Point(1,5);
+            return new Point(1,4);
         }
         else if (checkPointInCircle(x,y,cxB6,cyB)) {
-            return new Point(1,6);
+            return new Point(1,5);
         }
         else {
             return null;
