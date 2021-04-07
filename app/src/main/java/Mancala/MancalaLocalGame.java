@@ -1,7 +1,10 @@
 package Mancala;
 
+import android.util.Log;
+
 import com.example.mancala.game.GameFramework.LocalGame;
 import com.example.mancala.game.GameFramework.actionMessage.GameAction;
+import com.example.mancala.game.GameFramework.infoMessage.GameOverInfo;
 import com.example.mancala.game.GameFramework.players.GamePlayer;
 
 public class MancalaLocalGame extends LocalGame {
@@ -54,9 +57,9 @@ public class MancalaLocalGame extends LocalGame {
 
         if(computerRowValue == 0 || humanRowValue == 0){
             if(humanStoreValue > computerStoreValue){
-                return playerNames[0] + " won!";
+                return playerNames[0] + " won! ";
             } else {
-                return playerNames[1] + " won!";
+                return playerNames[1] + " won! ";
             }
         } else {
             return null; // neither row is empty, game continues
@@ -88,9 +91,7 @@ public class MancalaLocalGame extends LocalGame {
 
         state.selectPit(row,col);
         //figure out a way to give the player another turn if necessary
-        state.setWhoseTurn(1- whoseTurn);
-
-
+            state.setWhoseTurn(1- whoseTurn);
         return true;
     }
 }

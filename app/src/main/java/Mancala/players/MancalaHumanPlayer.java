@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.GameMainActivity;
@@ -23,7 +24,7 @@ import Mancala.MancalaMoveAction;
 
 import static java.lang.Thread.sleep;
 
-public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
+public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener, AdapterView.OnItemSelectedListener {
     //private int layoutId;
     private BoardView boardView;
     /**
@@ -68,11 +69,11 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
 
 
-        /*Spinner spinner = myActivity.findViewById(R.id.difficulty);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.difficulty, android.R.layout.simple_spinner_item);
+        Spinner spinner = myActivity.findViewById(R.id.difficulty);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.myActivity, R.array.difficulty, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);*/
+        spinner.setOnItemSelectedListener(this);
 
         boardView = myActivity.findViewById(R.id.GameView);
         Logger.log("set listener","OnTouch");
@@ -96,13 +97,14 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return true;
     }
 
-   /* @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
+        String text = parent.getItemAtPosition(position).toString();
+        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }*/
+    }
 }

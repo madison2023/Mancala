@@ -6,25 +6,31 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceView;
 
 import com.example.mancala.game.GameFramework.utilities.FlashSurfaceView;
 
 public class BoardView extends FlashSurfaceView {
 
+    private final static float BORDER_PERCENT = 5;
+    private final static float POCKET_SIZE_PERCENT = 1.5f;
+    private final static float SPACING_PERCENT = 3;
+    private final static float SQUARE_DELTA_PERCENT = POCKET_SIZE_PERCENT
+            + SPACING_PERCENT;
+
+    protected float hBase;
+    protected float vBase;
+
+    protected float fullSquare;
+
     // pocket circle radius
-    private float radius = 90f;
+    private float radius = v(POCKET_SIZE_PERCENT) + h(POCKET_SIZE_PERCENT);
 
     //measurements of board
-    private final float boardWidth = 1780.0f;
-    private final float boardHeight = 480.0f;
-    private final float boardOuterLeft = 100.0f;
     private final float boardInnerLeft = 110.0f;
-    private final float boardOuterRight = 1900.0f;
     private final float boardInnerRight = 1890.0f;
-    private final float boardOuterTop = 200.0f;
     private final float boardInnerTop = 210.0f;
-    private final float boardOuterBottom = 685.0f;
     private final float boardInnerBottom = 675.0f;
     private final float ovalTop = 248f;
     private final float ovalBottom = 637f;
@@ -116,8 +122,8 @@ public class BoardView extends FlashSurfaceView {
     //uses random arrangement instead of circular
     public void drawStoreMarbles(float cx, float cy, int numMarbles, Canvas canvas, boolean isLeft) {
         //coordinates for text
-        float textCxLeftStore = (boardInnerLeft + boardOuterLeft+(boardWidth/45))/2;
-        float textCxRightStore = (boardInnerRight + boardOuterRight-(boardWidth/45))/2;
+        float textCxLeftStore = (boardInnerLeft + h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
+        float textCxRightStore = (boardInnerRight + h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
 
         float radius = 80.0f;
         double angle = 0.0;
@@ -156,10 +162,10 @@ public class BoardView extends FlashSurfaceView {
 
     public void drawTurnName(Canvas canvas, boolean isComputersTurn) {
         if (isComputersTurn) {
-            canvas.drawText("Computer's Turn", boardOuterLeft + boardWidth/2, boardOuterBottom + 100, text);
+            canvas.drawText("Computer's Turn", h(BORDER_PERCENT) + (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/2, v(100 - (BORDER_PERCENT*4)) + 100, text);
         }
         else {
-            canvas.drawText("Your Turn", boardOuterLeft + boardWidth/2, boardOuterBottom + 100, text);
+            canvas.drawText("Your Turn", h(BORDER_PERCENT) + (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/2, v(100 - (BORDER_PERCENT*4)) + 100, text);
         }
     }
 
@@ -171,38 +177,38 @@ public class BoardView extends FlashSurfaceView {
         /*// pocket circle radius
         float radius = 90f;*/
 
-
-
         //centers of stores
-        float cxLeftStore = ((boardOuterLeft + (boardWidth / 45)) + (boardOuterLeft + (boardWidth / 7))) / 2;
-        float cxRightStore = ((boardOuterRight - (boardWidth / 45)) + (boardOuterRight - boardWidth / 7)) / 2;
-        float cyStore = ((boardOuterTop + (boardHeight / 10)) + boardOuterBottom - (boardHeight / 10)) / 2;
-        
+        float cxLeftStore = ((h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 45)) + (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 7))) / 2;
+        float cxRightStore = ((h(100 - BORDER_PERCENT) - ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 45)) + (h(100 - BORDER_PERCENT) - (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 7)) / 2;
+        float cyStore = ((v(BORDER_PERCENT*4) + (((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4)) / 10)) + v(100 - (BORDER_PERCENT*4)) - (((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4)) / 10)) / 2));
+
+        canvas.drawRect(h(BORDER_PERCENT),v(BORDER_PERCENT*4),h(100 - BORDER_PERCENT), v(100 - (BORDER_PERCENT*4)), brown);
 
         // Draws board
-        canvas.drawRect(boardOuterLeft,boardOuterTop,boardOuterRight, boardOuterBottom, black);
-        canvas.drawRect(boardInnerLeft,boardInnerTop, boardInnerRight, boardInnerBottom, brown);
+        //canvas.drawRect(boardOuterLeft,boardOuterTop,boardOuterRight, boardOuterBottom, black);
+        //canvas.drawRect(boardInnerLeft,boardInnerTop, boardInnerRight, boardInnerBottom, brown);
 
         // Draws left oval
-        canvas.drawOval(boardOuterLeft+(boardWidth/45), boardOuterTop+(boardHeight/10), boardOuterLeft+(boardWidth/7), boardOuterBottom-(boardHeight/10), black);
-        canvas.drawOval(boardOuterLeft+(boardWidth/40f), boardOuterTop+(boardHeight/9), boardOuterLeft+(boardWidth/7.18f), boardOuterBottom-(boardHeight/9), lightBrown);
+        canvas.drawOval(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), black);
+        canvas.drawOval(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), lightBrown);
 
         // Draws right oval
-        canvas.drawOval(boardOuterRight-(boardWidth/45), boardOuterTop+(boardHeight/10), boardOuterRight-(boardWidth/7), boardOuterBottom-(boardHeight/10), black);
-        canvas.drawOval(boardOuterRight-(boardWidth/40f), boardOuterTop+(boardHeight/9), boardOuterRight-(boardWidth/7.18f), boardOuterBottom-(boardHeight/9), lightBrown);
+        canvas.drawOval(h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), black);
+        canvas.drawOval(h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), lightBrown);
 
 
 
         for(int i = 0; i < 6; i++){
             // Draws top row of pockets
-            float cxTop = 363.78f + radius + (i * (1487.1f/7f));
-            float cyTop = ovalTop + radius;
-            drawPocket(canvas, cxTop, cyTop, radius);
+            Log.d("rightsideoval", String.valueOf(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)));
+            float cxTop = h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7) + p(POCKET_SIZE_PERCENT) + (i * (263 * (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))) / 2205);
+            float cyTop = (v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + p(POCKET_SIZE_PERCENT);
+            drawPocket(canvas, cxTop, cyTop, p(POCKET_SIZE_PERCENT));
 
             // Draws bottom row of pockets
-            float cxBottom = 363.78f + radius + (i * (1487.1f/7f));
-            float cyBottom = ovalBottom - radius;
-            drawPocket(canvas, cxBottom, cyBottom, radius);
+            float cxBottom = 363.78f + p(POCKET_SIZE_PERCENT) + (i * (1487.1f/7f));
+            float cyBottom = (v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) - p(POCKET_SIZE_PERCENT);
+            drawPocket(canvas, cxBottom, cyBottom, p(POCKET_SIZE_PERCENT));
         }
 
         if(state == null) {
@@ -295,6 +301,20 @@ public class BoardView extends FlashSurfaceView {
         else {
             return null;
         }
+    }
+    private float h(float percent) {
+        float width = getWidth();
+        return percent / 100 * width;
+    }
+    private float v(float percent) {
+        float height = getHeight();
+        return percent / 100 * height;
+    }
+
+    private float p(float percent) {
+        float width = getWidth();
+        float height = getHeight();
+        return (float) Math.sqrt(percent / 100 * (height * width) / (float)Math.PI);
     }
 }
 
