@@ -65,7 +65,7 @@ public class MancalaGameState extends GameState implements Serializable  {
     public String toString(){
         return "\nComputer Player's Pockets: " + Arrays.toString(player1) + "\nHuman Player's Pockets: "
                 + Arrays.toString(player0) + "Whose turn: " + whoseTurn + "\nNumMarbles: " + numMarbles + "\nLast Column: "
-                + lastCol + "\nLast Row: " + lastRow;
+                    + lastCol + "\nLast Row: " + lastRow;
     }
 
 
@@ -75,13 +75,13 @@ public class MancalaGameState extends GameState implements Serializable  {
     public boolean selectPit(int row, int col) { //columns labeled 0-6, where 0 is the first pocket and 6 is the store
         if(whoseTurn == 0) {  //human
             //if(row == 0 && player0[col] != 0 && col != 6) { //cant make a move from an empty pit, one that isn't yours, or your store
-            //set selected pit to zero
-            numMarbles = player0[col];
-            player0[col] = 0;
-            //add one marble to each pit while there are still marbles going into other array if necessary
-            addMarblesToPlayer0(col+1);
-            //isHumansTurn = !isHumansTurn; //next player's turn
-            return true;
+                //set selected pit to zero
+                numMarbles = player0[col];
+                player0[col] = 0;
+                //add one marble to each pit while there are still marbles going into other array if necessary
+                addMarblesToPlayer0(col+1);
+                //isHumansTurn = !isHumansTurn; //next player's turn
+                return true;
             //}
             //else {
             //    return false;
@@ -89,13 +89,13 @@ public class MancalaGameState extends GameState implements Serializable  {
         }
         else if (whoseTurn == 1){
             //if (row == 1 && player1[col] != 0 && col != 6) { //cant make a move from an empty pit, one that isn't yours, or your store
-            //set selected pit to zero
-            numMarbles = player1[col];
-            player1[col] = 0;
-            //add one marble to each pit while there are still marbles going into other array if necessary
-            addMarblesToPlayer1(col+1);
-            //isHumansTurn = !isHumansTurn;
-            return true;
+                //set selected pit to zero
+                numMarbles = player1[col];
+                player1[col] = 0;
+                //add one marble to each pit while there are still marbles going into other array if necessary
+                addMarblesToPlayer1(col+1);
+                //isHumansTurn = !isHumansTurn;
+                return true;
             //} else {
             //    return false;
             //}

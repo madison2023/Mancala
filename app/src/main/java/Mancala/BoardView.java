@@ -241,12 +241,13 @@ public class BoardView extends FlashSurfaceView {
         drawStoreMarbles(cxLeftStore, cyStore, player1[6], canvas, true);
 
         //draw Text that says whose turn it is
-        if (state.getWhoseTurn() == 0) {
-            drawTurnName(canvas, false);  //need to figure out if whoseTurn actually keeps track of this right
+        /*if (state.getWhoseTurn() == 0) {
+            drawTurnName(canvas, false); //need to change this so that it doesn't rely on human always being player 0
         }
         else {
             drawTurnName(canvas, true);
-        }
+        }*/
+        //canvas.drawText(state.getPlayerName() +"'s Turn", boardOuterLeft + boardWidth/2, boardOuterBottom + 100, text);
     }
 
 

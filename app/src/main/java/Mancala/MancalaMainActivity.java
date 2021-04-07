@@ -34,7 +34,7 @@ public class MancalaMainActivity extends GameMainActivity {
         playerTypes.add(new GamePlayerType("Local Human Player") {
             @Override
             public GamePlayer createPlayer(String name) {
-                return new MancalaHumanPlayer(name, R.layout.activity_main); //this needs to be changed to the board_main.xml
+                return new MancalaHumanPlayer(name);
             }
         });
 

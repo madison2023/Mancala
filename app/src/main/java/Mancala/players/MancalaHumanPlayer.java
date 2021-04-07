@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.GameMainActivity;
@@ -24,17 +24,24 @@ import Mancala.MancalaMoveAction;
 
 import static java.lang.Thread.sleep;
 
-public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener, AdapterView.OnItemSelectedListener {
-    //private int layoutId;
+public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
+
     private BoardView boardView;
+    private TextView whoseTurnTextView;
     /**
      * constructor
      *
      * @param name the name of the player
      */
-    public MancalaHumanPlayer(String name, int layoutId) {
+    public MancalaHumanPlayer(String name) {
         super(name);
-        //this.layoutId = layoutId;
+
+    }
+
+    @Override
+    protected void initAfterReady() {
+        super.initAfterReady();
+        whoseTurnTextView.setText(allPlayerNames[0]);
     }
 
     @Override
@@ -47,14 +54,16 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         if (boardView == null) return;
 
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
-            // if the move was out of turn or otherwise illegal, flash the screen
+            // flashing screen for an illegal move
             boardView.flash(Color.RED, 50);
         }
-        if (!(info instanceof MancalaGameState))
-            // if we do not have a TTTState, ignore
+        if (!(info instanceof MancalaGameState)) {
             return;
+        }
         else {
-            boardView.setState((MancalaGameState)info);
+            MancalaGameState mancalaGameState = (MancalaGameState)info;
+            boardView.setState(mancalaGameState);
+            whoseTurnTextView.setText(allPlayerNames[mancalaGameState.getWhoseTurn()] + "'s Turn");
             boardView.invalidate();
             //Logger.log(TAG, "receiving");
         }
@@ -63,21 +72,20 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     @Override
     public void setAsGui(GameMainActivity activity) {
         //like oncreate
-        // Load the layout resource for the new configuration
-        //activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         activity.setContentView(R.layout.board_main);
 
 
 
-        Spinner spinner = myActivity.findViewById(R.id.difficulty);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.myActivity, R.array.difficulty, android.R.layout.simple_spinner_item);
+        /*Spinner spinner = myActivity.findViewById(R.id.difficulty);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.difficulty, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        spinner.setOnItemSelectedListener(this);*/
 
         boardView = myActivity.findViewById(R.id.GameView);
         Logger.log("set listener","OnTouch");
         boardView.setOnTouchListener(this);
+        this.whoseTurnTextView     = (TextView)myActivity.findViewById(R.id.whoseTurnTextView);
     }
 
     @Override
@@ -97,14 +105,13 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return true;
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
-        String text = parent.getItemAtPosition(position).toString();
-        Toast.makeText(parent.getContext(), text, Toast.LENGTH_SHORT).show();
+   /* @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+    public void onNothingSelected(AdapterView<?> parent) {
 
-    }
+    }*/
 }
