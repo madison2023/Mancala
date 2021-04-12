@@ -5,6 +5,9 @@ package Mancala;
 import com.example.mancala.game.GameFramework.players.GamePlayer;
 import com.example.mancala.game.GameFramework.actionMessage.GameAction;
 
+/**
+ * @author Henry Lee
+ */
 public class MancalaMoveAction extends GameAction{
 
     private int row;

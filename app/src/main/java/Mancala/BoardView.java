@@ -10,6 +10,10 @@ import android.view.SurfaceView;
 
 import com.example.mancala.game.GameFramework.utilities.FlashSurfaceView;
 
+/**
+ * A surface view that has the board and marbles drawn on it
+ * @author Jordan Nakamura, Henry Lee, Rachel Madison
+ */
 public class BoardView extends FlashSurfaceView {
 
     // pocket circle radius
@@ -255,7 +259,7 @@ public class BoardView extends FlashSurfaceView {
         return (x - cx) * (x - cx) + (y - cy) * (y - cy) <= radius*radius;
     }
 
-    public Point mapPixelToPit(float x, float y) { //implement this, might need to be changed to ints
+    public Point mapPixelToPit(float x, float y) {
         //row 0 is bottom row
         if (checkPointInCircle(x,y,cxA1,cyA)) {
             return new Point(0,0);

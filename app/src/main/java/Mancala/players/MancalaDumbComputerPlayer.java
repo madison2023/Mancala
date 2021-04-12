@@ -8,6 +8,9 @@ import java.util.Random;
 import Mancala.MancalaGameState;
 import Mancala.MancalaMoveAction;
 
+/**
+ * @author Henry Lee
+ */
 public class MancalaDumbComputerPlayer extends GameComputerPlayer {
 
     protected Random gen = new Random();
@@ -51,7 +54,7 @@ public class MancalaDumbComputerPlayer extends GameComputerPlayer {
 
             // register action
             MancalaMoveAction action = new MancalaMoveAction(this, this.playerNum, pitNumber);
-            sleep(4.0);
+            sleep(3.0);
             game.sendAction(action);
 
         }

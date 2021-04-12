@@ -4,6 +4,10 @@ import com.example.mancala.game.GameFramework.LocalGame;
 import com.example.mancala.game.GameFramework.actionMessage.GameAction;
 import com.example.mancala.game.GameFramework.players.GamePlayer;
 
+/**
+ * Local Game for Mancala--enforces the rules of the game
+ * @author Henry Lee, Jordan Nakamura, Rachel Madison
+ */
 public class MancalaLocalGame extends LocalGame {
 
     public MancalaLocalGame() {
@@ -27,7 +31,7 @@ public class MancalaLocalGame extends LocalGame {
      *
      * @param playerIdx
      * 		the player's player-number (ID)
-     * @return
+     * @return true if the player can move, false otherwise
      */
     @Override
     protected boolean canMove(int playerIdx) {
@@ -40,7 +44,7 @@ public class MancalaLocalGame extends LocalGame {
 
         MancalaGameState state = (MancalaGameState) super.state;
 
-        int player1TotalMarbles = 0; // number of marbles in computer pockets
+        int player1TotalMarbles = 0; //number of marbles in all of their pockets (not including the store)
         int player0TotalMarbles = 0;
 
         int[] temp = state.getPlayer0();
@@ -66,6 +70,13 @@ public class MancalaLocalGame extends LocalGame {
         }
     }
 
+    /**
+     * makes move by selecting pit and then capture's/gives another turn according to
+     * the rules of the game
+     *
+     * @param action The move that the player has sent to the game
+     * @return true if able to make the move, false otherwise
+     */
     @Override
     protected boolean makeMove(GameAction action) {
         MancalaMoveAction mancalaMoveAction = (MancalaMoveAction) action;
@@ -88,7 +99,7 @@ public class MancalaLocalGame extends LocalGame {
 
         state.selectPit(row,col);
 
-        //captures marbles if you land in an empty store and the opponent has marble in the opposite pocket
+        //captures marbles if you land in an empty pocket and the opponent has marbles in the opposite pocket
         if(whoseTurn == 0 && state.getLastRow() == 0 && player0[state.getLastCol()] == 1
                 && player1[Math.abs(state.getLastCol()-5)] > 0 && state.getLastCol() != 6) {
             state.capture(state.getLastRow(),state.getLastCol());

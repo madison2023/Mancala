@@ -6,22 +6,18 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
+ * Has the state of a Mancala game, contains information about where the marbles are,
+ * the player's score, where the last marble landed, etc
  * @author Rachel Madison, Henry Lee, Jordan Nakamura
  */
 public class MancalaGameState extends GameState implements Serializable  {
+
     //arrays for each player will store number of marbles in the corresponding pocket
     //ex: if player0 has 4 marbles in their first pocket player0[0] = 4
     private int[] player0;
     private int[] player1;
 
-    //stores who's turn it is
     private int whoseTurn;
-
-
-    //private boolean rowIsEmpty; //if true game is over
-
-    private int numMarbles;
-
     private int lastRow;
     private int lastCol;
 
@@ -57,75 +53,85 @@ public class MancalaGameState extends GameState implements Serializable  {
         whoseTurn = original.whoseTurn;
         lastCol = original.lastCol;
         lastRow = original.lastRow;
-        numMarbles = original.numMarbles;
+
 
     }
 
     @Override
     public String toString(){
         return "\nComputer Player's Pockets: " + Arrays.toString(player1) + "\nHuman Player's Pockets: "
-                + Arrays.toString(player0) + "Whose turn: " + whoseTurn + "\nNumMarbles: " + numMarbles + "\nLast Column: "
+                + Arrays.toString(player0) + "Whose turn: " + whoseTurn + "\nLast Column: "
                     + lastCol + "\nLast Row: " + lastRow;
     }
 
 
-//"\nisHumansTurn = " + isHumansTurn + "\nrowIsEmpty = " + rowIsEmpty +
 
 
-    public boolean selectPit(int row, int col) { //columns labeled 0-6, where 0 is the first pocket and 6 is the store
-        if(whoseTurn == 0) {  //human
-            //if(row == 0 && player0[col] != 0 && col != 6) { //cant make a move from an empty pit, one that isn't yours, or your store
+
+
+    /**
+     * the player selects a pit/pocket and then the pieces are moved according to the rules of the game
+     * @param row   the bottom is row 0 and top is row 1
+     * @param col   columns labeled 0-6, where 0 is the first pocket and 6 is the store
+     * @return  true if successfully select a pit and false otherwise
+     */
+    public boolean selectPit(int row, int col) {
+        if(whoseTurn == 0) {
                 //set selected pit to zero
-                numMarbles = player0[col];
+                int numMarbles = player0[col];
                 player0[col] = 0;
                 //add one marble to each pit while there are still marbles going into other array if necessary
-                addMarblesToPlayer0(col+1);
-                //isHumansTurn = !isHumansTurn; //next player's turn
+                addMarblesToPlayer0(col+1, numMarbles);
                 return true;
-            //}
-            //else {
-            //    return false;
-            //}
         }
         else if (whoseTurn == 1){
-            //if (row == 1 && player1[col] != 0 && col != 6) { //cant make a move from an empty pit, one that isn't yours, or your store
                 //set selected pit to zero
-                numMarbles = player1[col];
+                int numMarbles = player1[col];
                 player1[col] = 0;
                 //add one marble to each pit while there are still marbles going into other array if necessary
-                addMarblesToPlayer1(col+1);
-                //isHumansTurn = !isHumansTurn;
+                addMarblesToPlayer1(col+1, numMarbles);
                 return true;
-            //} else {
-            //    return false;
-            //}
         }
         else {
             return false;
         }
     }
 
-    public void addMarblesToPlayer0(int col){
-        while(numMarbles > 0) {
-            //second half of this if statement is making sure we don't add a marble to the wrong players store
 
+    /**
+     * adds one marble to each pit in player0's array until they run out of marbles or need to go
+     * into the other player's array
+     * @param col the column we start adding marbles at
+     */
+    public void addMarblesToPlayer0(int col, int numMarbles){
+        while(numMarbles > 0) {
+            //making sure we don't add a marble to the wrong players store or go out of bounds
             if(col != player0.length && !(col == 6 && whoseTurn == 1)) {
+                //getting the row and col of the last place we land, important for special cases
+                //like capturing and getting another turn
                 if(numMarbles == 1) {
                     lastRow = 0;
                     lastCol = col;
                 }
+
                 player0[col] += 1;
                 col++;
             }
             else {
-                addMarblesToPlayer1( 0);//would start at the beginning of the marbles array
+                addMarblesToPlayer1( 0, numMarbles);//would start at the beginning of the marbles array
                 return;
             }
             numMarbles--;
         }
     }
 
-    public void addMarblesToPlayer1 (int col) {
+    /**
+     * adds one marble to each pit in player1's array until they run out of marbles or need to go
+     * into the other player's array
+     *
+     * @param col the column we start adding marbles at
+     */
+    public void addMarblesToPlayer1 (int col, int numMarbles) {
         while(numMarbles > 0) {
             if(col != player1.length && !(col == 6 && whoseTurn == 0)) {
                 if(numMarbles == 1) {
@@ -136,14 +142,21 @@ public class MancalaGameState extends GameState implements Serializable  {
                 col++;
             }
             else {
-                addMarblesToPlayer0(0); //would start at the beginning of the human array
+                addMarblesToPlayer0(0, numMarbles); //would start at the beginning of the human array
                 return;
-
             }
             numMarbles--;
         }
     }
 
+    /**
+     * takes the (row,col) where the player's last marble landed and sends that last marble
+     * and the ones in the opponents pocket across from it to their store
+     *
+     * @param row the row of the player who is trying to capture
+     * @param col the column the player's last marble landed at
+     *
+     */
     public void capture(int row, int col) {
         int oppRow = 1 - row; //opponents row that we are capturing from
         int oppCol = Math.abs(col - 5); //opponents column
@@ -161,6 +174,11 @@ public class MancalaGameState extends GameState implements Serializable  {
 
     }
 
+    /**
+     * used for testing to make sure the GameState is functioning correctly
+     * @param object
+     * @return true if the object is the same as the current MancalaGameState
+     */
     public boolean equals(Object object) {
         if(! (object instanceof MancalaGameState)) return false;
         MancalaGameState state = (MancalaGameState) object;
@@ -173,7 +191,7 @@ public class MancalaGameState extends GameState implements Serializable  {
         }
 
 
-        if (this.whoseTurn != state.whoseTurn || this.numMarbles != state.numMarbles || this.lastRow != state.lastRow || this.lastCol != state.lastCol) {
+        if (this.whoseTurn != state.whoseTurn || this.lastRow != state.lastRow || this.lastCol != state.lastCol) {
             return false;
         }
         else {
