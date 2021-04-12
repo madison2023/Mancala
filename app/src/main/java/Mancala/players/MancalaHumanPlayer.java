@@ -24,13 +24,17 @@ import Mancala.MancalaMoveAction;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * Enables interaction with the GUI
+ * @author Rachel Madison
+ */
 public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
 
     private BoardView boardView;
     private TextView whoseTurnTextView;
+
     /**
      * constructor
-     *
      * @param name the name of the player
      */
     public MancalaHumanPlayer(String name) {
@@ -39,16 +43,17 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     }
 
     @Override
-    protected void initAfterReady() {
-        super.initAfterReady();
-        whoseTurnTextView.setText(allPlayerNames[0]);
-    }
-
-    @Override
     public View getTopView() {
         return myActivity.findViewById(R.id.top_gui_layout);
     }
 
+    /**
+     External Citation
+     Date:     3 April 2020
+     Problem:  Could not figure out how to set up receive info
+     Resource: TicTacToe example code
+     Solution: used the structure from tictactoe's receive info
+     */
     @Override
     public void receiveInfo(GameInfo info) {
         if (boardView == null) return;
@@ -74,8 +79,6 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         //like oncreate
         activity.setContentView(R.layout.board_main);
 
-
-
         /*Spinner spinner = myActivity.findViewById(R.id.difficulty);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.difficulty, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -88,6 +91,14 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         this.whoseTurnTextView     = (TextView)myActivity.findViewById(R.id.whoseTurnTextView);
     }
 
+    /**
+     External Citation
+     Date:     3 April 2020
+     Problem:  Didn't know how to handle touch action
+     Resource: TicTacToe example code
+     Solution: used the structure from tictactoe's onTouch since both games are
+                coordinate based for the actions
+     */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         //ignoring if action is not up
@@ -95,10 +106,10 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
         float x = event.getX();
         float y = event.getY();
-        //map to pixel here
-        Point p = boardView.mapPixelToPit(x,y);
-        if (p != null) {
-            MancalaMoveAction action = new MancalaMoveAction(this, p.x, p.y);
+        Point point = boardView.mapPixelToPit(x,y);
+
+        if (point != null) {
+            MancalaMoveAction action = new MancalaMoveAction(this, point.x, point.y);
             game.sendAction(action);
             boardView.invalidate();
         }

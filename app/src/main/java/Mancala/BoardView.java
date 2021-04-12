@@ -11,6 +11,10 @@ import android.view.SurfaceView;
 
 import com.example.mancala.game.GameFramework.utilities.FlashSurfaceView;
 
+/**
+ * A surface view that has the board and marbles drawn on it
+ * @author Jordan Nakamura, Henry Lee, Rachel Madison
+ */
 public class BoardView extends FlashSurfaceView {
 
     private final static float BORDER_PERCENT = 5;
@@ -257,7 +261,7 @@ public class BoardView extends FlashSurfaceView {
         cyB = (v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + p(POCKET_SIZE_PERCENT);
     }
 
-    public Point mapPixelToPit(float x, float y) { //implement this, might need to be changed to ints
+    public Point mapPixelToPit(float x, float y) {
         //row 0 is bottom row
         if (checkPointInCircle(x,y,cxA1,cyA)) {
             return new Point(0,0);
@@ -278,22 +282,22 @@ public class BoardView extends FlashSurfaceView {
             return new Point(0,5);
         }
         else if (checkPointInCircle(x,y,cxB1,cyB)) {
-            return new Point(1,1);
+            return new Point(1,0);
         }
         else if (checkPointInCircle(x,y,cxB2,cyB)) {
-            return new Point(1,2);
+            return new Point(1,1);
         }
         else if (checkPointInCircle(x,y,cxB3,cyB)) {
-            return new Point(1,3);
+            return new Point(1,2);
         }
         else if (checkPointInCircle(x,y,cxB4,cyB)) {
-            return new Point(1,4);
+            return new Point(1,3);
         }
         else if (checkPointInCircle(x,y,cxB5,cyB)) {
-            return new Point(1,5);
+            return new Point(1,4);
         }
         else if (checkPointInCircle(x,y,cxB6,cyB)) {
-            return new Point(1,6);
+            return new Point(1,5);
         }
         else {
             return null;

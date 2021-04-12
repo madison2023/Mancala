@@ -30,6 +30,18 @@ public class MancalaTests {
     }
 
     @Test
+    public void capture(){
+        MancalaGameState MancalaState = new MancalaGameState();
+        int[] player0 = MancalaState.getPlayer0();
+        int[] player1 = MancalaState.getPlayer1();
+        player0[3]=1;
+        MancalaState.capture(0,3);
+        assertEquals(player0[6],5);
+        assertEquals(player0[3],0);
+        assertEquals(player1[2],0);
+    }
+
+    @Test
     public void selectPit(){
         MancalaGameState MancalaState = new MancalaGameState();
         MancalaState.selectPit(0,0);

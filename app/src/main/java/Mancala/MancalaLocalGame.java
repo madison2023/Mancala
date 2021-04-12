@@ -4,6 +4,10 @@ import com.example.mancala.game.GameFramework.LocalGame;
 import com.example.mancala.game.GameFramework.actionMessage.GameAction;
 import com.example.mancala.game.GameFramework.players.GamePlayer;
 
+/**
+ * Local Game for Mancala--enforces the rules of the game
+ * @author Henry Lee, Jordan Nakamura, Rachel Madison
+ */
 public class MancalaLocalGame extends LocalGame {
 
     public MancalaLocalGame() {
@@ -27,7 +31,7 @@ public class MancalaLocalGame extends LocalGame {
      *
      * @param playerIdx
      * 		the player's player-number (ID)
-     * @return
+     * @return true if the player can move, false otherwise
      */
     @Override
     protected boolean canMove(int playerIdx) {
@@ -40,23 +44,23 @@ public class MancalaLocalGame extends LocalGame {
 
         MancalaGameState state = (MancalaGameState) super.state;
 
-        int computerRowValue = 0; // number of marbles in computer pockets
-        int humanRowValue = 0;
+        int player1TotalMarbles = 0; //number of marbles in all of their pockets (not including the store)
+        int player0TotalMarbles = 0;
 
         int[] temp = state.getPlayer0();
-        int computerStoreValue = temp[6]; // set computer score
+        int player0StoreValue = temp[6]; // set player 0 score
         for (int i = 0; i < temp.length - 1; i++) {
-            computerRowValue = temp[i] + computerRowValue;
+            player0TotalMarbles = temp[i] + player0TotalMarbles;
         }
 
         temp = state.getPlayer1();
-        int humanStoreValue = temp[6]; // set human score
+        int player1StoreValue = temp[6]; // set player 1 score
         for (int i = 0; i < temp.length - 1; i++) {
-            humanRowValue = temp[i] + humanRowValue;
+            player1TotalMarbles = temp[i] + player1TotalMarbles;
         }
 
-        if(computerRowValue == 0 || humanRowValue == 0){
-            if(humanStoreValue > computerStoreValue){
+        if(player0TotalMarbles == 0 || player1TotalMarbles == 0){
+            if(player0StoreValue > player1StoreValue){
                 return playerNames[0] + " won! ";
             } else {
                 return playerNames[1] + " won! ";
@@ -66,6 +70,13 @@ public class MancalaLocalGame extends LocalGame {
         }
     }
 
+    /**
+     * makes move by selecting pit and then capture's/gives another turn according to
+     * the rules of the game
+     *
+     * @param action The move that the player has sent to the game
+     * @return true if able to make the move, false otherwise
+     */
     @Override
     protected boolean makeMove(GameAction action) {
         MancalaMoveAction mancalaMoveAction = (MancalaMoveAction) action;
@@ -74,7 +85,6 @@ public class MancalaLocalGame extends LocalGame {
         int row = mancalaMoveAction.getRow();
         int col = mancalaMoveAction.getCol();
 
-        //int playerId = getPlayerIdx(mancalaMoveAction.getPlayer());
 
         int whoseTurn = state.getWhoseTurn();
         int[] player0 = state.getPlayer0();
@@ -89,15 +99,17 @@ public class MancalaLocalGame extends LocalGame {
 
         state.selectPit(row,col);
 
-        //captures marbles if you land in an empty store and the opponent has marble in the opposite pocket
-        if(whoseTurn == 0 && state.getLastRow() == 0 && player0[state.getLastCol()] == 1 && player1[state.getLastCol()] != 0) {
+        //captures marbles if you land in an empty pocket and the opponent has marbles in the opposite pocket
+        if(whoseTurn == 0 && state.getLastRow() == 0 && player0[state.getLastCol()] == 1
+                && player1[Math.abs(state.getLastCol()-5)] > 0 && state.getLastCol() != 6) {
             state.capture(state.getLastRow(),state.getLastCol());
         }
-        else if(whoseTurn == 1 && state.getLastRow() == 1 && player1[state.getLastCol()] == 1 && player0[state.getLastCol()] != 0) {
+        else if(whoseTurn == 1 && state.getLastRow() == 1 && player1[state.getLastCol()] == 1
+                && player0[Math.abs(state.getLastCol()-5)] > 0 && state.getLastCol() != 6) {
             state.capture(state.getLastRow(),state.getLastCol());
         }
 
-        //give the player another turn if necessary
+        //switch whose turn it is if we don't need to give the player another turn
         if(!(state.getLastCol() == 6 && state.getLastRow() == whoseTurn)) {
             state.setWhoseTurn(1 - whoseTurn);
         }

@@ -15,9 +15,21 @@ import Mancala.players.MancalaDumbComputerPlayer;
 import Mancala.players.MancalaHumanPlayer;
 import Mancala.players.MancalaSmarterComputerPlayer;
 
+/**
+ * Sets up the default configuration and creates the Local Game
+ * @author Rachel Madison
+ */
 public class MancalaMainActivity extends GameMainActivity {
 
     public static final int PORT_NUMBER = 5213;
+
+    /**
+     External Citation
+     Date:     24 March 2020
+     Problem:  Confused about how to set up the default configuration
+     Resource: TicTacToe example code
+     Solution: used some of the structure from tictactoe
+     */
     @Override
     public GameConfig createDefaultConfig() {
         // Define the allowed player types
