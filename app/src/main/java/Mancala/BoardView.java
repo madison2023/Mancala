@@ -15,47 +15,30 @@ public class BoardView extends FlashSurfaceView {
 
     private final static float BORDER_PERCENT = 5;
     private final static float POCKET_SIZE_PERCENT = 1.5f;
-    private final static float SPACING_PERCENT = 3;
-    private final static float SQUARE_DELTA_PERCENT = POCKET_SIZE_PERCENT
-            + SPACING_PERCENT;
-
-    protected float hBase;
-    protected float vBase;
-
-    protected float fullSquare;
-
-    // pocket circle radius
-    private float radius = v(POCKET_SIZE_PERCENT) + h(POCKET_SIZE_PERCENT);
-
-    //measurements of board
-    private final float boardInnerLeft = 110.0f;
-    private final float boardInnerRight = 1890.0f;
-    private final float boardInnerTop = 210.0f;
-    private final float boardInnerBottom = 675.0f;
-    private final float ovalTop = 248f;
-    private final float ovalBottom = 637f;
+    private final static float MARBLE_SIZE_PERCENT = 0.05f;
 
     //centers of Pits
     //Player A is the bottom row Player B is top row
     //Position A1 is the left bottom, position A6 is bottom right
     //Position B1 is top right, position B6 is top left
-    float cxA1 = 363.78f + radius + (0*(1487.1f/7f));
-    float cxA2 = 363.78f + radius + (1*(1487.1f/7f));
-    float cxA3 = 363.78f + radius + (2*(1487.1f/7f));
-    float cxA4 = 363.78f + radius + (3*(1487.1f/7f));
-    float cxA5 = 363.78f + radius + (4*(1487.1f/7f));
-    float cxA6 = 363.78f + radius + (5*(1487.1f/7f));
-    //y for all of the A pockets
-    float cyA = ovalBottom - radius;
+    float cxA1;
+    float cxA2;
+    float cxA3;
+    float cxA4;
+    float cxA5;
+    float cxA6;
 
-    float cxB1 = 363.78f + radius + (5 * (1487.1f/7f));
-    float cxB2 = 363.78f + radius + (4 * (1487.1f/7f));
-    float cxB3 = 363.78f + radius + (3 * (1487.1f/7f));
-    float cxB4 = 363.78f + radius + (2 * (1487.1f/7f));
-    float cxB5 = 363.78f + radius + (1 * (1487.1f/7f));
-    float cxB6 = 363.78f + radius + (0 * (1487.1f/7f));
+    // y for all the bottom row pockets
+    float cyA;
+
+    float cxB1;
+    float cxB2;
+    float cxB3;
+    float cxB4;
+    float cxB5;
+    float cxB6;
     //y for all of the B pockets
-    float cyB = ovalTop + radius;
+    float cyB;
 
     //colors
     Paint black = new Paint();
@@ -66,9 +49,6 @@ public class BoardView extends FlashSurfaceView {
     Paint text = new Paint();
 
     private MancalaGameState state;
-
-
-
 
     public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -85,21 +65,20 @@ public class BoardView extends FlashSurfaceView {
         text.setColor(Color.BLACK);
         text.setTextAlign(Paint.Align.CENTER);
         text.setTextSize(50);
-
     }
 
     //draws blue marble outlined in black
     public void drawMarble(float cx, float cy, Canvas canvas){
-        canvas.drawCircle(cx,cy,22.0f,black);
-        canvas.drawCircle(cx,cy,20.0f,lightBlue);
+        canvas.drawCircle(cx,cy,p(MARBLE_SIZE_PERCENT) + 2f,black);
+        canvas.drawCircle(cx,cy,p(MARBLE_SIZE_PERCENT),lightBlue);
     }
 
     //draws marbles for each pit
     //all same distance from center of pit
     public void drawPitMarbles(float cx, float cy, int numMarbles, Canvas canvas, boolean isTopRow) {
 
-        float textCyTopRow = boardInnerTop + (3*(ovalTop-boardInnerTop)/4);
-        float textCyBottomRow = boardInnerBottom - ((boardInnerBottom-ovalBottom)/4);
+        float textCyTopRow = ((v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + v(BORDER_PERCENT*4)) / 2;
+        float textCyBottomRow = ((v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + (v(100 - (BORDER_PERCENT*4)))) / 2;
 
         float radius = 50.0f;
         double angle = 0.0;
@@ -122,8 +101,8 @@ public class BoardView extends FlashSurfaceView {
     //uses random arrangement instead of circular
     public void drawStoreMarbles(float cx, float cy, int numMarbles, Canvas canvas, boolean isLeft) {
         //coordinates for text
-        float textCxLeftStore = (boardInnerLeft + h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
-        float textCxRightStore = (boardInnerRight + h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
+        float textCxLeftStore = (h(BORDER_PERCENT) + h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
+        float textCxRightStore = (h(100 - BORDER_PERCENT) + h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
 
         float radius = 80.0f;
         double angle = 0.0;
@@ -146,7 +125,7 @@ public class BoardView extends FlashSurfaceView {
     //draw the number
     public void drawMarblesNumber(float cx, float cy, int numMarbles, Canvas canvas){
         String numberStr = new Integer(numMarbles).toString();
-        canvas.drawText(numberStr, cx, cy, number);
+        canvas.drawText(numberStr, cx, cy + 5f, number);
     }
 
     /** draws pockets at coordinates cx and cy with specified radius */
@@ -174,19 +153,18 @@ public class BoardView extends FlashSurfaceView {
     /** onDraw method draws the game board and pockets. */
     public void onDraw(Canvas canvas){
 
+        setPoints();
+
         /*// pocket circle radius
         float radius = 90f;*/
 
         //centers of stores
         float cxLeftStore = ((h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 45)) + (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 7))) / 2;
         float cxRightStore = ((h(100 - BORDER_PERCENT) - ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 45)) + (h(100 - BORDER_PERCENT) - (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 7)) / 2;
-        float cyStore = ((v(BORDER_PERCENT*4) + (((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4)) / 10)) + v(100 - (BORDER_PERCENT*4)) - (((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4)) / 10)) / 2));
+        float cyStore = (cyA + cyB) / 2;
 
+        canvas.drawRect(h(BORDER_PERCENT) - 10,v(BORDER_PERCENT*4) - 10,h(100 - BORDER_PERCENT) + 10, v(100 - (BORDER_PERCENT*4)) + 10, black);
         canvas.drawRect(h(BORDER_PERCENT),v(BORDER_PERCENT*4),h(100 - BORDER_PERCENT), v(100 - (BORDER_PERCENT*4)), brown);
-
-        // Draws board
-        //canvas.drawRect(boardOuterLeft,boardOuterTop,boardOuterRight, boardOuterBottom, black);
-        //canvas.drawRect(boardInnerLeft,boardInnerTop, boardInnerRight, boardInnerBottom, brown);
 
         // Draws left oval
         canvas.drawOval(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), black);
@@ -196,19 +174,17 @@ public class BoardView extends FlashSurfaceView {
         canvas.drawOval(h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), black);
         canvas.drawOval(h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), lightBrown);
 
-
-
-        for(int i = 0; i < 6; i++){
+        for(int i = 1; i <= 6; i++){
+            float a = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7));
+            float b = (h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7));
             // Draws top row of pockets
-            Log.d("rightsideoval", String.valueOf(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)));
-            float cxTop = h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7) + p(POCKET_SIZE_PERCENT) + (i * (263 * (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))) / 2205);
+            float cx = a / 1.55f + (i * 1.2f * (b - a)) / 7f;
             float cyTop = (v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + p(POCKET_SIZE_PERCENT);
-            drawPocket(canvas, cxTop, cyTop, p(POCKET_SIZE_PERCENT));
+            drawPocket(canvas, cx, cyTop, p(POCKET_SIZE_PERCENT));
 
             // Draws bottom row of pockets
-            float cxBottom = 363.78f + p(POCKET_SIZE_PERCENT) + (i * (1487.1f/7f));
             float cyBottom = (v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) - p(POCKET_SIZE_PERCENT);
-            drawPocket(canvas, cxBottom, cyBottom, p(POCKET_SIZE_PERCENT));
+            drawPocket(canvas, cx, cyBottom, p(POCKET_SIZE_PERCENT));
         }
 
         if(state == null) {
@@ -258,7 +234,27 @@ public class BoardView extends FlashSurfaceView {
     private boolean checkPointInCircle(float x,float y, float cx, float cy) {
         //using equation (x-a)^2+(y-b)^2 == r^2 where (a,b) is the center of the circle
 
-        return (x - cx) * (x - cx) + (y - cy) * (y - cy) <= radius*radius;
+        return (x - cx) * (x - cx) + (y - cy) * (y - cy) <= p(POCKET_SIZE_PERCENT)*p(POCKET_SIZE_PERCENT);
+    }
+
+    public void setPoints(){
+        cxA1 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (1 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxA2 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (2 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxA3 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (3 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxA4 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (4 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxA5 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (5 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxA6 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (6 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        //y for all of the A pockets
+        cyA = (v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) - p(POCKET_SIZE_PERCENT);
+
+        cxB1 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (6 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxB2 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (5 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxB3 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (4 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxB4 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (3 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxB5 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (2 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxB6 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (1 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        // y for all the B pockets
+        cyB = (v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + p(POCKET_SIZE_PERCENT);
     }
 
     public Point mapPixelToPit(float x, float y) { //implement this, might need to be changed to ints

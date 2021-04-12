@@ -198,11 +198,9 @@ public class MancalaGameState extends GameState implements Serializable  {
         this.whoseTurn = whoseTurn;
     }
 
-
     public int getLastRow() {
         return lastRow;
     }
-
 
     public int getLastCol() {
         return lastCol;
