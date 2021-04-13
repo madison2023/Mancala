@@ -5,11 +5,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.SurfaceView;
 
 import com.example.mancala.game.GameFramework.utilities.FlashSurfaceView;
+
+import java.util.ArrayList;
 
 /**
  * A surface view that has the board and marbles drawn on it
@@ -54,6 +55,10 @@ public class BoardView extends FlashSurfaceView {
 
     private MancalaGameState state;
 
+    private ArrayList <PointF> pointArrayList;
+    private int player0Score;
+    private int player1Score;
+
     public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
@@ -69,6 +74,10 @@ public class BoardView extends FlashSurfaceView {
         text.setColor(Color.BLACK);
         text.setTextAlign(Paint.Align.CENTER);
         text.setTextSize(50);
+
+        pointArrayList = new ArrayList<>();
+        player0Score = 0;
+        player1Score = 0;
     }
 
     //draws blue marble outlined in black
@@ -84,7 +93,7 @@ public class BoardView extends FlashSurfaceView {
         float textCyTopRow = ((v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + v(BORDER_PERCENT*4)) / 2;
         float textCyBottomRow = ((v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + (v(100 - (BORDER_PERCENT*4)))) / 2;
 
-        float radius = 50.0f;
+        float radius = p(POCKET_SIZE_PERCENT)/2; //= 50.0f;
         double angle = 0.0;
 
         for(int i = 0; i < numMarbles; i++) {
@@ -108,14 +117,31 @@ public class BoardView extends FlashSurfaceView {
         float textCxLeftStore = (h(BORDER_PERCENT) + h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
         float textCxRightStore = (h(100 - BORDER_PERCENT) + h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
 
-        float radius = 80.0f;
+        float radius = (h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f)
+                - h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f))/2 - (p(MARBLE_SIZE_PERCENT) + 2f)*4; //4 times marble radius is making sure it doesnt get drawn on the edge
         double angle = 0.0;
 
-        for(int i = 0; i < numMarbles; i++) {
+        int numMarblesToAdd = 0;
+        if(!isLeft && numMarbles > player0Score) {
+            numMarblesToAdd = numMarbles - player0Score;
+            player0Score = numMarbles;
+        }
+        else if (isLeft && numMarbles > player1Score){
+            numMarblesToAdd = numMarbles - player1Score;
+            player1Score = numMarbles;
+        }
+
+        for(int i = 0; i < numMarblesToAdd; i++) {
+            angle += 2*Math.PI/(Math.random()*10);
             float centerx = (float) (cx + radius*Math.random()*Math.cos(angle));
             float centery = (float) (cy + radius*Math.random()*Math.sin(angle));
-            drawMarble(centerx,centery,canvas);
-            angle += 2*Math.PI/(Math.random()*15);
+            pointArrayList.add(new PointF(centerx,centery));
+            //drawMarble(centerx,centery,canvas);
+            //angle = 2*Math.PI/(Math.random()*8);
+        }
+
+        for(PointF pointF : pointArrayList){
+            drawMarble(pointF.x,pointF.y,canvas);
         }
 
         //draw the number of marbles for the store
