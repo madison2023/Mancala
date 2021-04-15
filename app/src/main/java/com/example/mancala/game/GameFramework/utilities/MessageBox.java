@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,6 +43,24 @@ public class MessageBox {
         builder.setPositiveButton("OK", null);
         AlertDialog alert = builder.create();
         alert.show();
+    }// popUpMessage
+
+    public static void helpPopUpMessage(SpannableString msg, Activity activity) {
+        if (activity == null) return;
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(msg);
+        builder.setPositiveButton("OK", null);
+        AlertDialog alert = builder.create();
+        alert.show();
+
+
+         /*External Citation
+         Date:     14 April 2021
+         Problem:  Could not get the link to be clickable
+         Resource: https://stackoverflow.com/questions/1997328/how-can-i-get-clickable-hyperlinks-in-alertdialog-from-a-string-resource
+         Solution: I used the following line from emmby's post.*/
+
+        ((TextView)alert.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
     }// popUpMessage
 
     /**

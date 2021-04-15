@@ -8,6 +8,8 @@ import com.example.mancala.game.GameFramework.gameConfiguration.GameConfig;
 import com.example.mancala.game.GameFramework.gameConfiguration.GamePlayerType;
 import com.example.mancala.game.GameFramework.infoMessage.GameState;
 import com.example.mancala.game.GameFramework.players.GamePlayer;
+import com.example.mancala.game.GameFramework.utilities.Logger;
+import com.example.mancala.game.GameFramework.utilities.Saving;
 
 import java.util.ArrayList;
 
@@ -26,7 +28,7 @@ public class MancalaMainActivity extends GameMainActivity {
     /**
      External Citation
      Date:     24 March 2020
-     Problem:  Confused about how to set up the default configuration
+     Problem:  Confused about how to set up the main activity
      Resource: TicTacToe example code
      Solution: used some of the structure from tictactoe
      */
@@ -76,4 +78,17 @@ public class MancalaMainActivity extends GameMainActivity {
         }
 
     }
+
+    @Override
+    public GameState saveGame(String gameName) {
+        return super.saveGame(getGameString(gameName));
+    }
+
+    @Override
+    public GameState loadGame(String gameName){
+        String appName = getGameString(gameName);
+        super.loadGame(appName);
+        return (GameState) new MancalaGameState((MancalaGameState) Saving.readFromFile(appName, this.getApplicationContext()));
+    }
+
 }

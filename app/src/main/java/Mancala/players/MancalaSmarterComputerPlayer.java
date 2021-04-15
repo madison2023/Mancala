@@ -87,7 +87,7 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
      */
     private void sendGame(int pitNum) {
         MancalaMoveAction action = new MancalaMoveAction(this, this.playerNum, pitNum);
-        sleep(3.0);
+        sleep(1);
         game.sendAction(action);
     }
 }

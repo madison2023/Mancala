@@ -7,6 +7,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -525,6 +528,22 @@ public abstract class GameMainActivity extends Activity implements
         switch (item.getItemId()) {
             case R.id.menu_help:
                 Logger.log(TAG, "This is the help button!");
+                final SpannableString s = new SpannableString("Set Up:\n" +
+                        "The Mancala board is made up of two rows of six pockets (also called “holes,” or “pits”) each. Four pieces are placed in each of the 12 pockets. Each player has a “store” (also called a “Mancala”) to his/her right side of the Mancala board.\n" +
+                        "\nGame Play:" +
+                        "\n1. The game begins with one player selecting one of the pockets on his/her side.\n" +
+                        "2. Moving counter-clockwise, the program will deposit one of the stones in each pocket until the stones run out.\n" +
+                        "3. If you run into your own Mancala (store), one piece will be placed in it. If you run into your opponent's Mancala, the program will skip it and continue moving to the next pocket.\n" +
+                        "4. If your last piece is dropped in your own Mancala, you take another turn.\n" +
+                        "5. If your last piece is dropped in an empty pocket on your side, you capture that piece and any pieces in the pocket directly opposite.\n" +
+                        "6. Captured pieces will be placed in your Mancala (store).\n" +
+                        "7. The game ends when all six pockets on one side of the Mancala board are empty.\n" +
+                        "8. The player who still has pieces on his/her side of the board when the game ends captures all of those pieces. \n" +
+                        "9. The winner is the player with the most pieces in their Mancala.\n" +
+                        "\nhttps://endlessgames.com/wp-content/uploads/Mancala_Instructions.pdf");
+                Linkify.addLinks(s, Linkify.WEB_URLS);
+
+                MessageBox.helpPopUpMessage(s , this);
                 return true;
             case R.id.save_game:
                 Logger.log(TAG, "This is the save button!");
