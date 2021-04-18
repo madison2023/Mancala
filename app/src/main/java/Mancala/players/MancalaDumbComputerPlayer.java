@@ -25,9 +25,9 @@ public class MancalaDumbComputerPlayer extends GameComputerPlayer {
 
     @Override
     protected void receiveInfo(GameInfo info) {
-        MancalaGameState dumbCompState = new MancalaGameState((MancalaGameState)info);
+        MancalaGameState dumbCompState = new MancalaGameState((MancalaGameState) info);
 
-        if (dumbCompState.getWhoseTurn() != this.playerNum){
+        if (dumbCompState.getWhoseTurn() != this.playerNum) {
             return;
         } else {
             // generate random number
@@ -35,17 +35,17 @@ public class MancalaDumbComputerPlayer extends GameComputerPlayer {
 
             // check if pit empty
             int marbleNum = 0;
-            if (playerNum == 0){
+            if (playerNum == dumbCompState.getPlayerBottom()) {
                 marbleNum = ((MancalaGameState) info).getPlayer0()[pitNumber];
-             } else {
+            } else {
                 marbleNum = ((MancalaGameState) info).getPlayer1()[pitNumber];
             }
 
             // continue checking until not empty pit
-            while (marbleNum == 0){
+            while (marbleNum == 0) {
                 pitNumber = gen.nextInt(6);
                 //marbleNum = 0;
-                if (playerNum == 0){
+                if (playerNum == dumbCompState.getPlayerBottom()) {
                     marbleNum = ((MancalaGameState) info).getPlayer0()[pitNumber];
                 } else {
                     marbleNum = ((MancalaGameState) info).getPlayer1()[pitNumber];
@@ -53,7 +53,7 @@ public class MancalaDumbComputerPlayer extends GameComputerPlayer {
             }
 
             // register action
-            MancalaMoveAction action = new MancalaMoveAction(this, this.playerNum, pitNumber);
+            MancalaMoveAction action = new MancalaMoveAction(this, 1, pitNumber); //this.playerNum
             sleep(3.0);
             game.sendAction(action);
 

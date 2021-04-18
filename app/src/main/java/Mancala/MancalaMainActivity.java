@@ -90,5 +90,4 @@ public class MancalaMainActivity extends GameMainActivity {
         super.loadGame(appName);
         return (GameState) new MancalaGameState((MancalaGameState) Saving.readFromFile(appName, this.getApplicationContext()));
     }
-
 }

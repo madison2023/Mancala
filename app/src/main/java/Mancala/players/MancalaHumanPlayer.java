@@ -78,7 +78,6 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     public void setAsGui(GameMainActivity activity) {
         //like oncreate
         activity.setContentView(R.layout.board_main);
-
         /*Spinner spinner = myActivity.findViewById(R.id.difficulty);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.difficulty, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -116,7 +115,18 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return true;
     }
 
-   /* @Override
+    @Override
+    protected void initAfterReady() {
+        super.initAfterReady();
+
+        MancalaGameState gameState = (MancalaGameState) game.getGameState();
+        gameState.setPlayerBottom(playerNum);
+        gameState.setWhoseTurn(playerNum);
+        gameState.setPlayerTop(1-playerNum);
+    }
+
+
+    /* @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
     }

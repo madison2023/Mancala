@@ -61,9 +61,9 @@ public class MancalaLocalGame extends LocalGame {
 
         if(player0TotalMarbles == 0 || player1TotalMarbles == 0){
             if(player0StoreValue > player1StoreValue){
-                return playerNames[0] + " won! ";
+                return playerNames[state.getPlayerBottom()] + " won! "; //was playerNames[0]
             } else {
-                return playerNames[1] + " won! ";
+                return playerNames[state.getPlayerTop()] + " won! ";
             }
         } else {
             return null; // neither row is empty, game continues
@@ -90,27 +90,28 @@ public class MancalaLocalGame extends LocalGame {
         int[] player0 = state.getPlayer0();
         int[] player1 = state.getPlayer1();
 
-        if (whoseTurn == 0 && (row == 1 || player0[col] == 0 || col == 6)) {
+        if (whoseTurn == state.getPlayerBottom() && (row == 1 || player0[col] == 0 || col == 6)) { //was whoseTurn == 0 /*&& (state.getPlayerBottom() == 0)*/
             return false;
         }
-        else if (whoseTurn == 1 && (row == 0 || player1[col] == 0 || col == 6)) {
+        else if (whoseTurn == state.getPlayerTop() && (row == 0 || player1[col] == 0 || col == 6)) { /*&& (state.getPlayerTop() == 1)*/
             return false;
         }
 
         state.selectPit(row,col);
 
         //captures marbles if you land in an empty pocket and the opponent has marbles in the opposite pocket
-        if(whoseTurn == 0 && state.getLastRow() == 0 && player0[state.getLastCol()] == 1
+        if(whoseTurn == state.getPlayerBottom() && state.getLastRow() == 0 && player0[state.getLastCol()] == 1
                 && player1[Math.abs(state.getLastCol()-5)] > 0 && state.getLastCol() != 6) {
             state.capture(state.getLastRow(),state.getLastCol());
         }
-        else if(whoseTurn == 1 && state.getLastRow() == 1 && player1[state.getLastCol()] == 1
+        else if(whoseTurn == state.getPlayerTop() && state.getLastRow() == 1 && player1[state.getLastCol()] == 1
                 && player0[Math.abs(state.getLastCol()-5)] > 0 && state.getLastCol() != 6) {
             state.capture(state.getLastRow(),state.getLastCol());
         }
 
         //switch whose turn it is if we don't need to give the player another turn
-        if(!(state.getLastCol() == 6 && state.getLastRow() == whoseTurn)) {
+        if(!(state.getLastCol() == 6 && ((state.getLastRow() == 1 && whoseTurn == state.getPlayerTop())
+            || (state.getLastRow() == 0 && whoseTurn == state.getPlayerBottom())))) { //was && state.getLastRow() == whoseTurn
             state.setWhoseTurn(1 - whoseTurn);
         }
 

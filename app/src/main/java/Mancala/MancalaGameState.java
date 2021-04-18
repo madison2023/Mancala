@@ -21,6 +21,10 @@ public class MancalaGameState extends GameState implements Serializable  {
     private int lastRow;
     private int lastCol;
 
+    private int playerBottom;
+    private int playerTop;
+
+
     //constructor for objects of class MancalaGameState
     public MancalaGameState() {
         //initializing the number of marbles in each pocket
@@ -35,7 +39,9 @@ public class MancalaGameState extends GameState implements Serializable  {
         player1[player1.length - 1] = 0;
 
 
-        whoseTurn = 0;
+        //whoseTurn = 0;
+        //whoseTurn = playerBottom;
+        //playerTop = 1 - playerBottom;
 
     }
 
@@ -53,6 +59,8 @@ public class MancalaGameState extends GameState implements Serializable  {
         whoseTurn = original.whoseTurn;
         lastCol = original.lastCol;
         lastRow = original.lastRow;
+        playerBottom = original.playerBottom;
+        playerTop = original.playerTop;
 
 
     }
@@ -61,7 +69,7 @@ public class MancalaGameState extends GameState implements Serializable  {
     public String toString(){
         return "\nComputer Player's Pockets: " + Arrays.toString(player1) + "\nHuman Player's Pockets: "
                 + Arrays.toString(player0) + "Whose turn: " + whoseTurn + "\nLast Column: "
-                    + lastCol + "\nLast Row: " + lastRow;
+                    + lastCol + "\nLast Row: " + lastRow + "\nPlayerBottom: " + playerBottom + "\nPlayerTop: " + playerTop;
     }
 
 
@@ -76,7 +84,7 @@ public class MancalaGameState extends GameState implements Serializable  {
      * @return  true if successfully select a pit and false otherwise
      */
     public boolean selectPit(int row, int col) {
-        if(whoseTurn == 0) {
+        if(whoseTurn == playerBottom) {
                 //set selected pit to zero
                 int numMarbles = player0[col];
                 player0[col] = 0;
@@ -84,7 +92,7 @@ public class MancalaGameState extends GameState implements Serializable  {
                 addMarblesToPlayer0(col+1, numMarbles);
                 return true;
         }
-        else if (whoseTurn == 1){
+        else if (whoseTurn == playerTop){
                 //set selected pit to zero
                 int numMarbles = player1[col];
                 player1[col] = 0;
@@ -106,7 +114,7 @@ public class MancalaGameState extends GameState implements Serializable  {
     public void addMarblesToPlayer0(int col, int numMarbles){
         while(numMarbles > 0) {
             //making sure we don't add a marble to the wrong players store or go out of bounds
-            if(col != player0.length && !(col == 6 && whoseTurn == 1)) {
+            if(col != player0.length && !(col == 6 && whoseTurn == playerTop)) { //was == 1
                 //getting the row and col of the last place we land, important for special cases
                 //like capturing and getting another turn
                 if(numMarbles == 1) {
@@ -133,7 +141,7 @@ public class MancalaGameState extends GameState implements Serializable  {
      */
     public void addMarblesToPlayer1 (int col, int numMarbles) {
         while(numMarbles > 0) {
-            if(col != player1.length && !(col == 6 && whoseTurn == 0)) {
+            if(col != player1.length && !(col == 6 && whoseTurn == playerBottom)) { //was == 0
                 if(numMarbles == 1) {
                     lastRow = 1;
                     lastCol = col;
@@ -191,7 +199,8 @@ public class MancalaGameState extends GameState implements Serializable  {
         }
 
 
-        if (this.whoseTurn != state.whoseTurn || this.lastRow != state.lastRow || this.lastCol != state.lastCol) {
+        if (this.whoseTurn != state.whoseTurn || this.lastRow != state.lastRow || this.lastCol != state.lastCol
+            || this.playerTop != state.playerTop || this.playerBottom != state.playerBottom) {
             return false;
         }
         else {
@@ -208,6 +217,13 @@ public class MancalaGameState extends GameState implements Serializable  {
         return player1;
     }
 
+    public void setPlayer0(int[] player0) {
+        this.player0 = player0;
+    }
+
+    public void setPlayer1(int[] player1) {
+        this.player1 = player1;
+    }
 
     public int getWhoseTurn() {
         return whoseTurn;
@@ -225,4 +241,19 @@ public class MancalaGameState extends GameState implements Serializable  {
         return lastCol;
     }
 
+    public void setPlayerBottom(int playerBottom) {
+        this.playerBottom = playerBottom;
+    }
+
+    public void setPlayerTop(int playerTop) {
+        this.playerTop = playerTop;
+    }
+
+    public int getPlayerBottom() {
+        return playerBottom;
+    }
+
+    public int getPlayerTop() {
+        return playerTop;
+    }
 }
