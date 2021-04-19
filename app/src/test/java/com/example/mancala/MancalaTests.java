@@ -29,6 +29,11 @@ public class MancalaTests {
         assertTrue("Copy Constructor did not produce equal States", MancalaState.equals(copyState));
     }
 
+
+    /**
+     * Tests the capture method in MancalaGameState
+     * @author Rachel Madison
+     */
     @Test
     public void capture(){
         MancalaGameState MancalaState = new MancalaGameState();
@@ -57,6 +62,9 @@ public class MancalaTests {
     @Test
     public void addMarblesToPlayer0() {
         MancalaGameState MancalaState = new MancalaGameState();
+        MancalaState.setWhoseTurn(0);
+        MancalaState.setPlayerBottom(0);
+        MancalaState.setPlayerTop(1);
         MancalaState.selectPit(0,3);
         int[] player0 = MancalaState.getPlayer0();
         assertEquals(1,player0[6]);
@@ -66,6 +74,8 @@ public class MancalaTests {
     public void addMarblesToPlayer1() {
         MancalaGameState MancalaState = new MancalaGameState();
         MancalaState.setWhoseTurn(1);
+        MancalaState.setPlayerTop(1);
+        MancalaState.setPlayerBottom(0);
         MancalaState.selectPit(0,3);
         int[] player1 = MancalaState.getPlayer1();
         assertEquals(1,player1[6]);

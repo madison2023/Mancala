@@ -66,7 +66,7 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             return;
         }
         else {
-            MancalaGameState mancalaGameState = (MancalaGameState)info;
+            MancalaGameState mancalaGameState = (MancalaGameState) info;
             boardView.setState(mancalaGameState);
             whoseTurnTextView.setText(allPlayerNames[mancalaGameState.getWhoseTurn()] + "'s Turn");
             boardView.invalidate();
@@ -87,7 +87,8 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         boardView = myActivity.findViewById(R.id.GameView);
         Logger.log("set listener","OnTouch");
         boardView.setOnTouchListener(this);
-        this.whoseTurnTextView     = (TextView)myActivity.findViewById(R.id.whoseTurnTextView);
+        this.whoseTurnTextView     = myActivity.findViewById(R.id.whoseTurnTextView); //was casted to textview
+        whoseTurnTextView.setText(""); //keeps it from saying "TextView" at the beginning
     }
 
     /**

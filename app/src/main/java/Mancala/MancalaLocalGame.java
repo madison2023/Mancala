@@ -6,7 +6,9 @@ import com.example.mancala.game.GameFramework.players.GamePlayer;
 
 /**
  * Local Game for Mancala--enforces the rules of the game
- * @author Henry Lee, Jordan Nakamura, Rachel Madison
+ * @author Henry Lee
+ * @author Jordan Nakamura
+ * @author Rachel Madison
  */
 public class MancalaLocalGame extends LocalGame {
 
