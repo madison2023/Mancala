@@ -14,7 +14,9 @@ import java.util.ArrayList;
 
 /**
  * A surface view that has the board and marbles drawn on it
- * @author Jordan Nakamura, Henry Lee, Rachel Madison
+ * @author Jordan Nakamura
+ * @author Henry Lee
+ * @author Rachel Madison
  */
 public class BoardView extends FlashSurfaceView {
 

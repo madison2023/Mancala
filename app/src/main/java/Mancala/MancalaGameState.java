@@ -8,7 +8,9 @@ import java.util.Arrays;
 /**
  * Has the state of a Mancala game, contains information about where the marbles are,
  * the player's score, where the last marble landed, etc
- * @author Rachel Madison, Henry Lee, Jordan Nakamura
+ * @author Rachel Madison
+ * @author Henry Lee
+ * @author Jordan Nakamura
  */
 public class MancalaGameState extends GameState implements Serializable  {
 
