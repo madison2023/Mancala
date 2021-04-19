@@ -1,7 +1,11 @@
 package Mancala;
 
+import android.util.Log;
+
+import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.LocalGame;
 import com.example.mancala.game.GameFramework.actionMessage.GameAction;
+import com.example.mancala.game.GameFramework.players.GameHumanPlayer;
 import com.example.mancala.game.GameFramework.players.GamePlayer;
 
 /**
@@ -41,25 +45,58 @@ public class MancalaLocalGame extends LocalGame {
     @Override
     protected String checkIfGameOver() {
 
-
         MancalaGameState state = (MancalaGameState) super.state;
 
         int player1TotalMarbles = 0; //number of marbles in all of their pockets (not including the store)
         int player0TotalMarbles = 0;
 
-        int[] temp = state.getPlayer0();
-        int player0StoreValue = temp[6]; // set player 0 score
-        for (int i = 0; i < temp.length - 1; i++) {
-            player0TotalMarbles = temp[i] + player0TotalMarbles;
+        int[] player0 = state.getPlayer0();// player pocket values
+        int[] player1 = state.getPlayer1();
+
+        int player0StoreValue = player0[6]; // set player 0 score
+        for (int i = 0; i < player0.length - 1; i++) {
+            player0TotalMarbles = player0[i] + player0TotalMarbles;
         }
 
-        temp = state.getPlayer1();
-        int player1StoreValue = temp[6]; // set player 1 score
-        for (int i = 0; i < temp.length - 1; i++) {
-            player1TotalMarbles = temp[i] + player1TotalMarbles;
+        int player1StoreValue = player1[6]; // set player 1 score
+        for (int i = 0; i < player1.length - 1; i++) {
+            player1TotalMarbles = player1[i] + player1TotalMarbles;
         }
 
-        if(player0TotalMarbles == 0 || player1TotalMarbles == 0){
+        GamePlayer humanPlayer;
+        if(getPlayers()[0] instanceof GameHumanPlayer) {
+            humanPlayer = getPlayers()[0];
+        } else {
+            humanPlayer = getPlayers()[1];
+        }
+
+        if(player0TotalMarbles == 0) {
+            for(int i =0; i < 6; i++) { // sets pockets to empty and moves left over marbles to player1 store
+                player1[6] = player1[6] + player1[i];
+                player1[i] = 0;
+            }
+
+            state.setPlayer1(player1);
+            player1StoreValue = player1[6];
+
+            sendUpdatedStateTo(humanPlayer);
+
+            if (player0StoreValue > player1StoreValue) {
+                return playerNames[state.getPlayerBottom()] + " won! "; //was playerNames[0]
+            } else {
+                return playerNames[state.getPlayerTop()] + " won! ";
+            }
+
+        } else if(player1TotalMarbles == 0){
+            for(int i =0; i < 6; i++){ // sets pockets to empty and moves left over marbles to player0 store
+                player0[6] = player0[6] + player0[i];
+                player0[i] = 0;
+            }
+            state.setPlayer0(player0);
+            player0StoreValue = player0[6];
+
+            sendUpdatedStateTo(humanPlayer); // sends updated store values
+
             if(player0StoreValue > player1StoreValue){
                 return playerNames[state.getPlayerBottom()] + " won! "; //was playerNames[0]
             } else {

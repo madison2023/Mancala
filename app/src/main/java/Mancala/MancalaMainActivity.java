@@ -37,7 +37,6 @@ public class MancalaMainActivity extends GameMainActivity {
         // Define the allowed player types
         ArrayList<GamePlayerType> playerTypes = new ArrayList<GamePlayerType>();
 
-
         playerTypes.add(new GamePlayerType("Dumb Computer Player") {
             @Override
             public GamePlayer createPlayer(String name) {
