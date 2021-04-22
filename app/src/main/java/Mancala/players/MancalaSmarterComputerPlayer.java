@@ -47,6 +47,10 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
             sendGame(pitNum);
         } */
 
+        if(smartCompstate.getWhoseTurn() != playerNum){
+            return;
+        }
+
         player0 = smartCompstate.getPlayer0();
         player1 = smartCompstate.getPlayer1();
         int getAnotherTurnPitNum = findGetAnotherTurn();
@@ -139,10 +143,16 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
     }
 
     private int findGetAnotherTurn(){
-        for (int i = 0; i < 6; i++){
+        for (int i = 5; i >= 0; i--){
             int numMarbles = player1[i];
-            if (i + numMarbles == 6){
+            Log.d("numMarbles", String.valueOf(numMarbles));
+            int newIndex = numMarbles + i;
+            if (numMarbles + i == 6){
                 return i;
+            } else if (newIndex < 6){
+                if (player1[newIndex] == 0 && player0[Math.abs(newIndex - 5)] != 0){
+                    return i;
+                }
             }
         }
         return -1;
@@ -153,7 +163,7 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
             int numMarbles = player1[i];
 
             int newIndex = numMarbles + i;
-            if (player1[newIndex] == 0 && player0[Math.abs(newIndex) - 5] != 0){
+            if (player1[newIndex] == 0 && player0[Math.abs(newIndex - 5)] != 0){
                 return i;
             }
         }
