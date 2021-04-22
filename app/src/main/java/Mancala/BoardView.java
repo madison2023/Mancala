@@ -1,13 +1,17 @@
 package Mancala;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.util.Log;
 
+import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.utilities.FlashSurfaceView;
 
 import java.util.ArrayList;
@@ -22,7 +26,9 @@ public class BoardView extends FlashSurfaceView {
 
     private final static float BORDER_PERCENT = 5;
     private final static float POCKET_SIZE_PERCENT = 1.5f;
-    private final static float MARBLE_SIZE_PERCENT = 0.05f;
+    private final static float MARBLE_SIZE_PERCENT = 0.5f;
+
+    private Bitmap redMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_red);
 
     //centers of Pits
     //Player A is the bottom row Player B is top row
@@ -84,8 +90,10 @@ public class BoardView extends FlashSurfaceView {
 
     //draws blue marble outlined in black
     public void drawMarble(float cx, float cy, Canvas canvas){
-        canvas.drawCircle(cx,cy,p(MARBLE_SIZE_PERCENT) + 2f,black);
-        canvas.drawCircle(cx,cy,p(MARBLE_SIZE_PERCENT),lightBlue);
+        //canvas.drawCircle(cx,cy,p(MARBLE_SIZE_PERCENT) + 2f,black);
+        //canvas.drawCircle(cx,cy,p(MARBLE_SIZE_PERCENT),lightBlue);
+        Bitmap scaledRedMarble = Bitmap.createScaledBitmap(redMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),false);
+        canvas.drawBitmap(scaledRedMarble,cx - ((int)p(MARBLE_SIZE_PERCENT)/2),cy - ((int)p(MARBLE_SIZE_PERCENT)/2),black);
     }
 
     //draws marbles for each pit
