@@ -1,5 +1,7 @@
 package Mancala.players;
 
+import android.util.Log;
+
 import com.example.mancala.game.GameFramework.infoMessage.GameInfo;
 import com.example.mancala.game.GameFramework.players.GameComputerPlayer;
 
@@ -80,6 +82,8 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
         }
 
     }
+
+
 
     /**
      * constructor to send the game action
