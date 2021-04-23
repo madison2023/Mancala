@@ -1,5 +1,7 @@
 package com.example.mancala;
 
+import android.view.View;
+
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.Test;
@@ -8,6 +10,7 @@ import org.robolectric.RobolectricTestRunner;
 import static org.junit.Assert.*;
 
 import Mancala.MancalaGameState;
+import Mancala.MancalaLocalGame;
 import Mancala.MancalaMainActivity;
 
 @RunWith(RobolectricTestRunner.class)
