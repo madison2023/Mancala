@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
@@ -29,6 +30,9 @@ public class BoardView extends FlashSurfaceView {
     private final static float MARBLE_SIZE_PERCENT = 0.5f;
 
     private Bitmap redMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_red);
+    private Bitmap greenMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_green);
+    private Bitmap blueMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_blue);
+
 
     //centers of Pits
     //Player A is the bottom row Player B is top row
@@ -88,12 +92,20 @@ public class BoardView extends FlashSurfaceView {
         player1Score = 0;
     }
 
-    //draws blue marble outlined in black
+    //draws random marble (red, green, or blue)
     public void drawMarble(float cx, float cy, Canvas canvas){
-        //canvas.drawCircle(cx,cy,p(MARBLE_SIZE_PERCENT) + 2f,black);
-        //canvas.drawCircle(cx,cy,p(MARBLE_SIZE_PERCENT),lightBlue);
-        Bitmap scaledRedMarble = Bitmap.createScaledBitmap(redMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),false);
-        canvas.drawBitmap(scaledRedMarble,cx - ((int)p(MARBLE_SIZE_PERCENT)/2),cy - ((int)p(MARBLE_SIZE_PERCENT)/2),black);
+        Bitmap scaledMarble;
+        float random = (float)Math.random();
+
+        if(random < 0.33f){
+            scaledMarble = Bitmap.createScaledBitmap(redMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),false);
+        } else if(random > 0.67){
+            scaledMarble = Bitmap.createScaledBitmap(greenMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),false);
+        } else {
+            scaledMarble = Bitmap.createScaledBitmap(blueMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),false);
+        }
+
+        canvas.drawBitmap(scaledMarble,cx - ((int)p(MARBLE_SIZE_PERCENT)/2),cy - ((int)p(MARBLE_SIZE_PERCENT)/2),black);
     }
 
     //draws marbles for each pit

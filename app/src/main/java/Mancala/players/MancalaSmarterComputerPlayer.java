@@ -16,9 +16,9 @@ import Mancala.MancalaMoveAction;
 public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
 
     protected Random gen = new Random();
-    int[] player0;
+    /*int[] player0;
     int[] player1;
-
+*/
     /**
      * constructor
      *
@@ -34,9 +34,15 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
             return;
         }
 
+
         Log.d("MancalaSmarterComputerPlayer", "receiveInfo - " + this.playerNum);
 
-        MancalaGameState smartCompstate = new MancalaGameState((MancalaGameState)info);
+        MancalaGameState smartCompstate = new MancalaGameState((MancalaGameState) info);
+        if(smartCompstate.getWhoseTurn() != playerNum) {
+            return;
+        }
+        int[] player0 = smartCompstate.getPlayer0();
+        int[] player1 = smartCompstate.getPlayer1();
         int pitNum;
 
         //use math to find the last marble
@@ -47,17 +53,16 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
             sendGame(pitNum);
         } */
 
-        if(smartCompstate.getWhoseTurn() != playerNum){
-            return;
-        }
 
-        player0 = smartCompstate.getPlayer0();
-        player1 = smartCompstate.getPlayer1();
-        int getAnotherTurnPitNum = findGetAnotherTurn();
-        if (getAnotherTurnPitNum != -1){
-            sendGame(getAnotherTurnPitNum);
+        int getAnotherTurnPitNum = findGetAnotherTurn(player1);
+        if (getAnotherTurnPitNum != -1) {
+            MancalaMoveAction action = new MancalaMoveAction(this, 1, getAnotherTurnPitNum);
+            sleep(3);
+            game.sendAction(action);
+            Log.d("Smarter Comp", "getAnotherTurnPit found");
+
         } else {
-            int lastPit = smartCompstate.getLastCol();
+            //int lastPit = smartCompstate.getLastCol();
             //int[] player0 = smartCompstate.getPlayer0();
             //int[] player1 = smartCompstate.getPlayer1();
             /*if (this.playerNum == 0){
@@ -103,70 +108,69 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
             } */
 
 
-                // generate random number
-                int pitNumber = gen.nextInt(6);
+            // generate random number
+            int pitNumber = gen.nextInt(6);
 
-                // check if pit empty
-                int marbleNum = 0;
+            // check if pit empty
+            int marbleNum = 0;
+
+            // continue checking until not empty pit
+            while (marbleNum == 0) {
+                pitNumber = gen.nextInt(6);
+                //marbleNum = 0;
                 if (playerNum == smartCompstate.getPlayerBottom()) {
                     marbleNum = ((MancalaGameState) info).getPlayer0()[pitNumber];
                 } else {
                     marbleNum = ((MancalaGameState) info).getPlayer1()[pitNumber];
                 }
-
-                // continue checking until not empty pit
-                while (marbleNum == 0) {
-                    pitNumber = gen.nextInt(6);
-                    //marbleNum = 0;
-                    if (playerNum == smartCompstate.getPlayerBottom()) {
-                        marbleNum = ((MancalaGameState) info).getPlayer0()[pitNumber];
-                    } else {
-                        marbleNum = ((MancalaGameState) info).getPlayer1()[pitNumber];
-                    }
-                }
-               sendGame(pitNumber);
-
             }
+            Log.d("Smarter Comp", "Random move");
+            MancalaMoveAction action = new MancalaMoveAction(this, 1, pitNumber);
+            sleep(3);
+            game.sendAction(action);
+
+        }
 
     }
 
+/*
 
-    /**
+    */
+/**
      * constructor to send the game action
-     * @param pitNum
-     */
+     *
+     *
+     *//*
+
     private void sendGame(int pitNum) {
         Log.d("MancalaSmarterComputerPlayer", "sendGame - " + this.playerNum + " " + pitNum);
-        MancalaMoveAction action = new MancalaMoveAction(this, this.playerNum, pitNum);
+        MancalaMoveAction action = new MancalaMoveAction(this, 1, pitNum);
         sleep(3);
         game.sendAction(action);
     }
+*/
 
-    private int findGetAnotherTurn(){
-        for (int i = 5; i >= 0; i--){
+    private int findGetAnotherTurn(int[] player1) {
+
+        for (int i = 5; i >= 0; i--) {
             int numMarbles = player1[i];
-            Log.d("numMarbles", String.valueOf(numMarbles));
-            int newIndex = numMarbles + i;
-            if (numMarbles + i == 6){
-                return i;
-            } else if (newIndex < 6){
-                if (player1[newIndex] == 0 && player0[Math.abs(newIndex - 5)] != 0){
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
-    private int findCapture(){
-        for(int i = 0; i < 6; i++) {
-            int numMarbles = player1[i];
-
-            int newIndex = numMarbles + i;
-            if (player1[newIndex] == 0 && player0[Math.abs(newIndex - 5)] != 0){
+            int endIndex = i + numMarbles;
+            if (endIndex == 6) {
                 return i;
             }
         }
         return -1;
     }
+
+    /*private int findCapture() {
+        for (int i = 0; i < 6; i++) {
+            int numMarbles = player1[i];
+
+            int newIndex = numMarbles + i;
+            if (player1[newIndex] == 0 && player0[Math.abs(newIndex) - 5] != 0) {
+                return i;
+            }
+        }
+        return -1;
+    }*/
 }

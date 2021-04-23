@@ -19,9 +19,7 @@ public class MancalaTests {
         activity = Robolectric.buildActivity(MancalaMainActivity.class).create().resume().get();
     }
 
-    //Tests focused on the state: copy constructors and equals
-    //copy cons:  empty default state, in progress state, full board state
-    //This tests the copy constructor when nothing is set
+
     @Test
     public void test_CopyConstructorOfState_Empty(){
         MancalaGameState MancalaState = new MancalaGameState();
@@ -29,6 +27,23 @@ public class MancalaTests {
         assertTrue("Copy Constructor did not produce equal States", MancalaState.equals(copyState));
     }
 
+    /*
+    * Tests that the copy constructor works when given a full MancalaGameState
+    * @author Rachel Madison
+    * */
+    @Test
+    public void copyConstructorOfState_full() {
+        MancalaGameState mancalaGameState = new MancalaGameState();
+        int[] player0 = {0,0,0,0,1,5,9};
+        int[] player1 = {1,1,0,1,4,3,10};
+        mancalaGameState.setPlayer0(player0);
+        mancalaGameState.setPlayer1(player1);
+        mancalaGameState.setWhoseTurn(0);
+        mancalaGameState.setPlayerTop(1);
+        mancalaGameState.setPlayerBottom(0);
+        MancalaGameState copyState = new MancalaGameState(mancalaGameState);
+        assertTrue(mancalaGameState.equals(copyState));
+    }
 
     /**
      * Tests the capture method in MancalaGameState
