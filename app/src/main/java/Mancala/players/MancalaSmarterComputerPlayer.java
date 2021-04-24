@@ -48,20 +48,21 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
 
         int getAnotherTurnPitNum = findGetAnotherTurn(player1); //problem with findGetAnotherTurn method
         if (getAnotherTurnPitNum != -1) {
-            MancalaMoveAction action = new MancalaMoveAction(this, 1, getAnotherTurnPitNum);
-            sleep(3);
-            game.sendAction(action);
+            sendGame(getAnotherTurnPitNum);
             Log.d("Smarter Comp", "getAnotherTurnPit found");
 
         } else {
-            int lastPit = smartCompstate.getLastCol();
+            /*int lastPit = smartCompstate.getLastCol();
             //player 1 - Computer
             int marbleCount = player1[lastPit];
             if (marbleCount == 0 && player0[lastPit] != 0){
                 // pit is empty, and pit across is not empty
                 // generate new pit number
                 int pitNumber = gen.nextInt(6);
-                sendGame(pitNumber);
+                sendGame(pitNumber);*/
+            int getCaptureMove = findCapture(player1,player0);
+            if (getCaptureMove != -1) {
+                sendGame(getCaptureMove);
             } else {
                 int largePit = 0;
                 int num = 0;
@@ -90,7 +91,7 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
     private void sendGame(int pitNum) {
         Log.d("MancalaSmarterComputerPlayer", "sendGame - " + this.playerNum + " " + pitNum);
         MancalaMoveAction action = new MancalaMoveAction(this, 1, pitNum);
-        sleep(1);
+        sleep(3);
         game.sendAction(action);
     }
 
@@ -102,6 +103,19 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
             int endIndex = i + numMarbles;
             if (endIndex == 6) {
                 return i;
+            }
+        }
+        return -1;
+    }
+
+    private int findCapture(int[] player1, int[] player0) {
+        for(int i = 0; i < 6; i++) {
+            int numMarbles = player1[i];
+            if(numMarbles != 0) {
+                int newIndex = numMarbles + i;
+                if (newIndex < 6 && player1[newIndex] == 0 && player0[Math.abs(newIndex - 5)] != 0) {
+                    return i;
+                }
             }
         }
         return -1;
