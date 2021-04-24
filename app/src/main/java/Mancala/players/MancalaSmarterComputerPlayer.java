@@ -36,9 +36,11 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
         Log.d("MancalaSmarterComputerPlayer", "receiveInfo - " + this.playerNum);
 
         MancalaGameState smartCompstate = new MancalaGameState((MancalaGameState) info);
-        if(smartCompstate.getWhoseTurn() != playerNum) {
+        if((smartCompstate.getWhoseTurn() != playerNum) || (this.playerNum == smartCompstate.getPlayerBottom())){
             return;
         }
+
+
         int[] player0 = smartCompstate.getPlayer0();
         int[] player1 = smartCompstate.getPlayer1();
         int pitNum;
@@ -53,31 +55,27 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
 
         } else {
             int lastPit = smartCompstate.getLastCol();
-            if (this.playerNum == smartCompstate.getPlayerBottom()){
-                //player 0 - Human
-                return;
+            //player 1 - Computer
+            int marbleCount = player1[lastPit];
+            if (marbleCount == 0 && player0[lastPit] != 0){
+                // pit is empty, and pit across is not empty
+                // generate new pit number
+                int pitNumber = gen.nextInt(6);
+                sendGame(pitNumber);
             } else {
-                //player 1 - Computer
-                int marbleCount = player1[lastPit];
-                if (marbleCount == 0 && player0[lastPit] != 0){
-                    // pit is empty, and pit across is not empty
-                    // generate new pit number
-                    int pitNumber = gen.nextInt(6);
-                    sendGame(pitNumber);
-                } else {
-                    int largePit = 0;
-                    int num = 0;
+                int largePit = 0;
+                int num = 0;
 
-                    //find pit with most marbles
-                    for (int i=0; i < player1.length-1; i++){
-                        if (player1[i] > num){
-                            num = player1[i];
-                            largePit = i;
-                        }
+                //find pit with most marbles
+                for (int i=0; i < player1.length-1; i++){
+                    if (player1[i] > num){
+                        num = player1[i];
+                        largePit = i;
                     }
-                    //send to the largePit
-                    sendGame(largePit);
                 }
+                //send to the largePit
+                sendGame(largePit);
+
             }
         }
 
@@ -109,15 +107,4 @@ public class MancalaSmarterComputerPlayer extends GameComputerPlayer {
         return -1;
     }
 
-    /*private int findCapture() {
-        for (int i = 0; i < 6; i++) {
-            int numMarbles = player1[i];
-
-            int newIndex = numMarbles + i;
-            if (player1[newIndex] == 0 && player0[Math.abs(newIndex) - 5] != 0) {
-                return i;
-            }
-        }
-        return -1;
-    }*/
 }
