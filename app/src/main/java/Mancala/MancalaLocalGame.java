@@ -84,7 +84,7 @@ public class MancalaLocalGame extends LocalGame {
             sendUpdatedStateTo(humanPlayer);
 
             if (player0StoreValue > player1StoreValue) {
-                return playerNames[state.getPlayerBottom()] + " won! "; //was playerNames[0]
+                return playerNames[state.getPlayerBottom()] + " won! ";
             } else {
                 return playerNames[state.getPlayerTop()] + " won! ";
             }
@@ -100,7 +100,7 @@ public class MancalaLocalGame extends LocalGame {
             sendUpdatedStateTo(humanPlayer); // sends updated store values
 
             if(player0StoreValue > player1StoreValue){
-                return playerNames[state.getPlayerBottom()] + " won! "; //was playerNames[0]
+                return playerNames[state.getPlayerBottom()] + " won! ";
             } else if (player0StoreValue == player1StoreValue){
                 return "It's a draw! ";
             } else {
@@ -131,10 +131,10 @@ public class MancalaLocalGame extends LocalGame {
         int[] player0 = state.getPlayer0();
         int[] player1 = state.getPlayer1();
 
-        if (whoseTurn == state.getPlayerBottom() && (row == 1 || player0[col] == 0 || col == 6)) { //was whoseTurn == 0 /*&& (state.getPlayerBottom() == 0)*/
+        if (whoseTurn == state.getPlayerBottom() && (row == 1 || player0[col] == 0 || col == 6)) {
             return false;
         }
-        else if (whoseTurn == state.getPlayerTop() && (row == 0 || player1[col] == 0 || col == 6)) { /*&& (state.getPlayerTop() == 1)*/
+        else if (whoseTurn == state.getPlayerTop() && (row == 0 || player1[col] == 0 || col == 6)) {
             return false;
         }
 
@@ -152,7 +152,7 @@ public class MancalaLocalGame extends LocalGame {
 
         //switch whose turn it is if we don't need to give the player another turn
         if(!(state.getLastCol() == 6 && ((state.getLastRow() == 1 && whoseTurn == state.getPlayerTop())
-            || (state.getLastRow() == 0 && whoseTurn == state.getPlayerBottom())))) { //was && state.getLastRow() == whoseTurn
+            || (state.getLastRow() == 0 && whoseTurn == state.getPlayerBottom())))) {
             state.setWhoseTurn(1 - whoseTurn);
         }
 
