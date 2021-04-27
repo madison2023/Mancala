@@ -4,7 +4,9 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +35,7 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     private BoardView boardView;
     private TextView whoseTurnTextView;
+    private MediaPlayer mp;
 
     /**
      * constructor
@@ -62,6 +65,12 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             // flashing screen for an illegal move
             boardView.flash(Color.RED, 50);
+            //Using sound to indicate an invalid move
+            mp = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.error);
+            mp.start();
+            Log.d("Sound", "Error Sound");
+
+
         }
         if (!(info instanceof MancalaGameState)) {
             return;
@@ -79,18 +88,11 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     public void setAsGui(GameMainActivity activity) {
         //like oncreate
         activity.setContentView(R.layout.board_main);
-        /*Spinner spinner = myActivity.findViewById(R.id.difficulty);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.difficulty, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);*/
-
         boardView = myActivity.findViewById(R.id.GameView);
         Logger.log("set listener","OnTouch");
         boardView.setOnTouchListener(this);
-        this.whoseTurnTextView     = myActivity.findViewById(R.id.whoseTurnTextView); //was casted to textview
+        this.whoseTurnTextView     = myActivity.findViewById(R.id.whoseTurnTextView);
         whoseTurnTextView.setText(""); //keeps it from saying "TextView" at the beginning
-
     }
 
     /**
@@ -111,10 +113,15 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         Point point = boardView.mapPixelToPit(x,y);
 
         if (point != null) {
+
             MancalaMoveAction action = new MancalaMoveAction(this, point.x, point.y);
             game.sendAction(action);
+            //Clicking sound
+            v.playSoundEffect(SoundEffectConstants.CLICK);
+            Log.d("Sound", "Click Sound");
             boardView.invalidate();
         }
+
         return true;
     }
 
