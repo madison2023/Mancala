@@ -1,6 +1,8 @@
 //package Mancala;
 package Mancala;
 
+import android.media.MediaPlayer;
+
 import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.GameMainActivity;
 import com.example.mancala.game.GameFramework.LocalGame;
@@ -8,7 +10,6 @@ import com.example.mancala.game.GameFramework.gameConfiguration.GameConfig;
 import com.example.mancala.game.GameFramework.gameConfiguration.GamePlayerType;
 import com.example.mancala.game.GameFramework.infoMessage.GameState;
 import com.example.mancala.game.GameFramework.players.GamePlayer;
-import com.example.mancala.game.GameFramework.utilities.Logger;
 import com.example.mancala.game.GameFramework.utilities.Saving;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class MancalaMainActivity extends GameMainActivity {
 
         defaultConfig.addPlayer("Human",1);
         defaultConfig.addPlayer("Computer",0);
+
 
         return defaultConfig;
 

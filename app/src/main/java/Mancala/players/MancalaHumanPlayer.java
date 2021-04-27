@@ -3,6 +3,7 @@ package Mancala.players;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -89,6 +90,7 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         boardView.setOnTouchListener(this);
         this.whoseTurnTextView     = myActivity.findViewById(R.id.whoseTurnTextView); //was casted to textview
         whoseTurnTextView.setText(""); //keeps it from saying "TextView" at the beginning
+
     }
 
     /**

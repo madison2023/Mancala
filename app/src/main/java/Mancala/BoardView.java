@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
 
@@ -90,6 +91,9 @@ public class BoardView extends FlashSurfaceView {
         pointArrayList = new ArrayList<>();
         player0Score = 0;
         player1Score = 0;
+
+        MediaPlayer mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.music);
+        mediaPlayer.start();
     }
 
     //draws random marble (red, green, or blue)
