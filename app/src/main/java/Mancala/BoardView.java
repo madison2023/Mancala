@@ -30,9 +30,9 @@ public class BoardView extends FlashSurfaceView {
     private final static float POCKET_SIZE_PERCENT = 1.5f;
     private final static float MARBLE_SIZE_PERCENT = 0.5f;
 
-    private Bitmap redMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_red);
-    private Bitmap greenMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_green);
-    private Bitmap blueMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_blue);
+    private final Bitmap redMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_red);
+    private final Bitmap greenMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_green);
+    private final Bitmap blueMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_blue);
 
 
     //centers of Pits
@@ -92,8 +92,7 @@ public class BoardView extends FlashSurfaceView {
         player0Score = 0;
         player1Score = 0;
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(context.getApplicationContext(), R.raw.music);
-        mediaPlayer.start();
+
     }
 
     //draws random marble (red, green, or blue)

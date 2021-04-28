@@ -68,6 +68,7 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             //Using sound to indicate an invalid move
             mp = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.error);
             mp.start();
+
             Log.d("Sound", "Error Sound");
 
 
@@ -125,6 +126,7 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return true;
     }
 
+
     @Override
     protected void initAfterReady() {
         super.initAfterReady();
@@ -133,6 +135,10 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         gameState.setPlayerBottom(playerNum);
         gameState.setWhoseTurn(playerNum);
         gameState.setPlayerTop(1-playerNum);
+
+        mp = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.music);
+        mp.setLooping(true);
+        mp.start();
     }
 
 
