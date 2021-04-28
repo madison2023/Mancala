@@ -30,7 +30,7 @@
                 android:id="@+id/titleConstraints"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#EBF5E8"
+                android:background="#C8E6C9"
                 android:padding="10dp">
 
                 <LinearLayout
@@ -102,7 +102,7 @@
                 android:id="@+id/GameView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="#E1F5FE" />
+                android:backgroundTint="#B3E5FC" />
 
 
         </LinearLayout>
@@ -110,7 +110,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FCE4EC"
+            android:background="#F8BBD0"
             android:paddingVertical="40dp">
 
             <TextView
