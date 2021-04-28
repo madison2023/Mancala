@@ -142,7 +142,6 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             mp.start();
         }
 
-
     }
 
 
