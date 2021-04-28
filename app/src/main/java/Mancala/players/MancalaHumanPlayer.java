@@ -138,7 +138,11 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
         mp = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.music);
         mp.setLooping(true);
-        mp.start();
+        if(!mp.isPlaying()) {
+            mp.start();
+        }
+
+
     }
 
 
