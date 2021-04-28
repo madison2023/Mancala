@@ -21,6 +21,8 @@ import com.example.mancala.game.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.mancala.game.GameFramework.players.GameHumanPlayer;
 import com.example.mancala.game.GameFramework.utilities.Logger;
 
+import java.io.IOException;
+
 import Mancala.BoardView;
 import Mancala.MancalaGameState;
 import Mancala.MancalaMoveAction;
@@ -35,7 +37,8 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     private BoardView boardView;
     private TextView whoseTurnTextView;
-    private MediaPlayer mp;
+    private MediaPlayer mp1;
+    private MediaPlayer mp2;
 
     /**
      * constructor
@@ -66,8 +69,8 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             // flashing screen for an illegal move
             boardView.flash(Color.RED, 50);
             //Using sound to indicate an invalid move
-            mp = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.error);
-            mp.start();
+            mp1 = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.error);
+            mp1.start();
 
             Log.d("Sound", "Error Sound");
 
@@ -136,9 +139,10 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         gameState.setWhoseTurn(playerNum);
         gameState.setPlayerTop(1-playerNum);
 
-        mp = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.music);
-        mp.setLooping(true);
-        mp.start();
+        mp2 = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.music);
+        mp2.setLooping(true);
+        mp2.start();
+
     }
 
 

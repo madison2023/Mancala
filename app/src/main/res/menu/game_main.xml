@@ -2,7 +2,6 @@
     <item android:id="@+id/menu_help"
         android:title="@string/menu_help"
         android:orderInCategory="100"/>
-
     <item android:id="@+id/save_game"
         android:title="@string/save_game"
         android:orderInCategory="100"/>
