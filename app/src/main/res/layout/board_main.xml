@@ -7,15 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <LinearLayout
         android:id="@+id/vertLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#E1F5FE"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
 
         <LinearLayout
             android:id="@+id/TitleLayout"
@@ -27,6 +30,7 @@
                 android:id="@+id/titleConstraints"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#EBF5E8"
                 android:padding="10dp">
 
                 <LinearLayout
@@ -81,7 +85,6 @@
                         android:visibility="invisible" />
 
 
-
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -98,13 +101,16 @@
             <Mancala.BoardView
                 android:id="@+id/GameView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:backgroundTint="#E1F5FE" />
+
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#FCE4EC"
             android:paddingVertical="40dp">
 
             <TextView
