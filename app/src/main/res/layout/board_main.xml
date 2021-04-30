@@ -39,7 +39,7 @@
                     android:gravity="start"
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="@+id/TitleTextLayout"
-                    app:layout_constraintTop_toTopOf="@+id/DifficultyLayout">
+                    app:layout_constraintTop_toTopOf="@+id/MusicLayout">
 
                     <Button
                         android:id="@+id/button"
@@ -48,6 +48,7 @@
                         android:layout_weight="1"
                         android:text="@string/quit"
                         android:visibility="invisible" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -66,10 +67,11 @@
                         android:text="@string/mancala"
                         android:textSize="50sp"
                         android:visibility="invisible" />
+
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/DifficultyLayout"
+                    android:id="@+id/MusicLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
@@ -77,14 +79,14 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:layout_editor_absoluteX="10dp">
 
-                    <Spinner
-                        android:id="@+id/difficulty"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:visibility="invisible" />
-
-
+                    <Switch
+                        android:id="@+id/musicSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:gravity="right"
+                        android:text="Music" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

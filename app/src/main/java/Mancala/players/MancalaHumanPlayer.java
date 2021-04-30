@@ -10,7 +10,10 @@ import android.view.SoundEffectConstants;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.mancala.R;
@@ -33,10 +36,11 @@ import static java.lang.Thread.sleep;
  * Enables interaction with the GUI
  * @author Rachel Madison
  */
-public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener {
+public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener, CompoundButton.OnCheckedChangeListener {
 
     private BoardView boardView;
     private TextView whoseTurnTextView;
+    private Switch toggleMusic;
     private MediaPlayer mp1;
     private MediaPlayer mp2;
 
@@ -97,6 +101,8 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         boardView.setOnTouchListener(this);
         this.whoseTurnTextView     = myActivity.findViewById(R.id.whoseTurnTextView);
         whoseTurnTextView.setText(""); //keeps it from saying "TextView" at the beginning
+        toggleMusic = myActivity.findViewById(R.id.musicSwitch);
+        toggleMusic.setOnCheckedChangeListener(this);
     }
 
     /**
@@ -141,8 +147,21 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
         mp2 = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.music);
         mp2.setLooping(true);
-        mp2.start();
+        if(myActivity.getGameOver()) {
+            mp2.stop();
+        } else {
+            mp2.start();
+        }
 
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        if (isChecked && !mp2.isPlaying()){
+            mp2.start();
+        } else {
+            mp2.pause();
+        }
     }
 
 
