@@ -85,6 +85,8 @@ public class MancalaLocalGame extends LocalGame {
 
             if (player0StoreValue > player1StoreValue) {
                 return playerNames[state.getPlayerBottom()] + " won! ";
+            } else if (player0StoreValue == player1StoreValue) {
+                return "It's a draw! ";
             } else {
                 return playerNames[state.getPlayerTop()] + " won! ";
             }

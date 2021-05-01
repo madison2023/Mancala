@@ -40,11 +40,6 @@ public class MancalaGameState extends GameState implements Serializable  {
         player0[player0.length - 1] = 0;
         player1[player1.length - 1] = 0;
 
-
-        //whoseTurn = 0;
-        //whoseTurn = playerBottom;
-        //playerTop = 1 - playerBottom;
-
     }
 
     //copy Constructor

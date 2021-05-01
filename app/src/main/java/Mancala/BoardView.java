@@ -12,6 +12,7 @@ import android.graphics.PointF;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.SurfaceView;
 
 import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.utilities.FlashSurfaceView;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  * @author Henry Lee
  * @author Rachel Madison
  */
-public class BoardView extends FlashSurfaceView {
+public class BoardView extends SurfaceView {
 
     private final static float BORDER_PERCENT = 5;
     private final static float POCKET_SIZE_PERCENT = 1.5f;

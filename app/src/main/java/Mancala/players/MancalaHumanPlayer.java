@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.MediaController;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -36,6 +37,8 @@ import static java.lang.Thread.sleep;
 /**
  * Enables interaction with the GUI
  * @author Rachel Madison
+ * @author Jordan Nakamura
+ * @author Henry Lee
  */
 public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener, CompoundButton.OnCheckedChangeListener {
 
@@ -51,7 +54,6 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
      */
     public MancalaHumanPlayer(String name) {
         super(name);
-
     }
 
     @Override
@@ -71,12 +73,9 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         if (boardView == null) return;
 
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
-            // flashing screen for an illegal move
-            boardView.flash(Color.RED, 50);
             //Using sound to indicate an invalid move
             mp1 = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.error);
             mp1.start();
-
             Log.d("Sound", "Error Sound");
         }
 
@@ -88,7 +87,6 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             boardView.setState(mancalaGameState);
             whoseTurnTextView.setText(allPlayerNames[mancalaGameState.getWhoseTurn()] + "'s Turn");
             boardView.invalidate();
-            //Logger.log(TAG, "receiving");
         }
     }
 
@@ -145,13 +143,10 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         gameState.setWhoseTurn(playerNum);
         gameState.setPlayerTop(1-playerNum);
 
+        //Background Music
         mp2 = MediaPlayer.create(myActivity.getApplicationContext(), R.raw.music);
+        mp2.start();
         mp2.setLooping(true);
-        if(myActivity.getGameOver()) {
-            mp2.stop();
-        } else {
-            mp2.start();
-        }
 
     }
 
@@ -172,13 +167,4 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
     }
 
 
-    /* @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }*/
 }
