@@ -111,6 +111,15 @@ public abstract class GameHumanPlayer implements GamePlayer, Tickable {
     }
 
     /**
+     * perform any action that needs to be done after the player
+     * knows what their game-position and opponents' names are.
+     */
+    protected void afterGameOver() {
+        // by default, we do nothing
+    }
+
+
+    /**
      * Sets this player as the one attached to the GUI. Saves the
      * activity, then invokes subclass-specific method.
      */
@@ -290,6 +299,9 @@ public abstract class GameHumanPlayer implements GamePlayer, Tickable {
 
                 // set our instance variable, to indicate the game as over
                 gameOver = true;
+
+                // perform game specific game over action
+                afterGameOver();
 
                 //Since the game is over, we will ask the player if they would like to restart the game
                 String quitQuestion = ((GameOverInfo)myInfo).getMessage() + "Would you like to restart the game?";

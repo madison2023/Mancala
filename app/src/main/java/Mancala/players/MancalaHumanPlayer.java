@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.mancala.R;
 import com.example.mancala.game.GameFramework.GameMainActivity;
 import com.example.mancala.game.GameFramework.infoMessage.GameInfo;
+import com.example.mancala.game.GameFramework.infoMessage.GameOverInfo;
 import com.example.mancala.game.GameFramework.infoMessage.IllegalMoveInfo;
 import com.example.mancala.game.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.mancala.game.GameFramework.players.GameHumanPlayer;
@@ -77,9 +78,8 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             mp1.start();
 
             Log.d("Sound", "Error Sound");
-
-
         }
+
         if (!(info instanceof MancalaGameState)) {
             return;
         }
@@ -153,6 +153,13 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
             mp2.start();
         }
 
+    }
+
+    // perform action after the Game is over
+    @Override
+    protected void afterGameOver() {
+        // stop music after game is over
+        mp2.stop();
     }
 
     @Override
