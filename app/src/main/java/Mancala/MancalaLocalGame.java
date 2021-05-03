@@ -10,17 +10,26 @@ import com.example.mancala.game.GameFramework.players.GamePlayer;
 
 /**
  * Local Game for Mancala--enforces the rules of the game
+ *
  * @author Henry Lee
  * @author Jordan Nakamura
  * @author Rachel Madison
  */
 public class MancalaLocalGame extends LocalGame {
 
+    /**
+     * constructor for MancalaLocalGame
+     */
     public MancalaLocalGame() {
         super();
         super.state = new MancalaGameState();
     }
 
+    /**
+     * copy constructor for MancalaLocalGame
+     *
+     * @param gameState
+     */
     public MancalaLocalGame(MancalaGameState gameState){
         super();
         super.state = new MancalaGameState(gameState);
@@ -28,6 +37,11 @@ public class MancalaLocalGame extends LocalGame {
 
     }
 
+    /**
+     * method to send the updated state to the MancalaGameState
+     *
+     * @param p
+     */
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
         p.sendInfo(new MancalaGameState(((MancalaGameState) state)));
@@ -44,23 +58,32 @@ public class MancalaLocalGame extends LocalGame {
         return playerIdx == ((MancalaGameState)state).getWhoseTurn();
     }
 
+    /**
+     * checks when the game ends, continues if game is not over
+     *
+     * @return
+     */
     @Override
     protected String checkIfGameOver() {
 
         MancalaGameState state = (MancalaGameState) super.state;
 
-        int player1TotalMarbles = 0; //number of marbles in all of their pockets (not including the store)
+        //number of marbles in all of their pockets (not including the store)
+        int player1TotalMarbles = 0;
         int player0TotalMarbles = 0;
 
-        int[] player0 = state.getPlayer0();// player pocket values
+        // player pocket values
+        int[] player0 = state.getPlayer0();
         int[] player1 = state.getPlayer1();
 
-        int player0StoreValue = player0[6]; // set player 0 score
+        // set player 0 score
+        int player0StoreValue = player0[6];
         for (int i = 0; i < player0.length - 1; i++) {
             player0TotalMarbles = player0[i] + player0TotalMarbles;
         }
 
-        int player1StoreValue = player1[6]; // set player 1 score
+        // set player 1 score
+        int player1StoreValue = player1[6];
         for (int i = 0; i < player1.length - 1; i++) {
             player1TotalMarbles = player1[i] + player1TotalMarbles;
         }
@@ -73,7 +96,8 @@ public class MancalaLocalGame extends LocalGame {
         }
 
         if(player0TotalMarbles == 0) {
-            for(int i =0; i < 6; i++) { // sets pockets to empty and moves left over marbles to player1 store
+            // sets pockets to empty and moves left over marbles to player1 store
+            for(int i =0; i < 6; i++) {
                 player1[6] = player1[6] + player1[i];
                 player1[i] = 0;
             }
@@ -92,14 +116,16 @@ public class MancalaLocalGame extends LocalGame {
             }
 
         } else if(player1TotalMarbles == 0){
-            for(int i =0; i < 6; i++){ // sets pockets to empty and moves left over marbles to player0 store
+            // sets pockets to empty and moves left over marbles to player0 store
+            for(int i =0; i < 6; i++){
                 player0[6] = player0[6] + player0[i];
                 player0[i] = 0;
             }
             state.setPlayer0(player0);
             player0StoreValue = player0[6];
 
-            sendUpdatedStateTo(humanPlayer); // sends updated store values
+            // sends updated store values
+            sendUpdatedStateTo(humanPlayer);
 
             if(player0StoreValue > player1StoreValue){
                 return playerNames[state.getPlayerBottom()] + " won! ";
@@ -109,7 +135,8 @@ public class MancalaLocalGame extends LocalGame {
                 return playerNames[state.getPlayerTop()] + " won! ";
             }
         } else {
-            return null; // neither row is empty, game continues
+            // neither row is empty, game continues
+            return null;
         }
     }
 

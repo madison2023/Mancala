@@ -20,6 +20,7 @@ import Mancala.players.MancalaSmarterComputerPlayer;
 
 /**
  * Sets up the default configuration and creates the Local Game
+ *
  * @author Rachel Madison
  */
 public class MancalaMainActivity extends GameMainActivity {
@@ -69,6 +70,14 @@ public class MancalaMainActivity extends GameMainActivity {
 
     }
 
+    /**
+     * method to create the LocalGame
+     *
+     * @param gameState
+     *              The desired gameState to start at or null for new game
+     *
+     * @return
+     */
     @Override
     public LocalGame createLocalGame(GameState gameState) {
         if(gameState == null) {
@@ -80,11 +89,23 @@ public class MancalaMainActivity extends GameMainActivity {
 
     }
 
+    /**
+     * method to save and return the current GameState
+     *
+     * @param gameName
+     * @return
+     */
     @Override
     public GameState saveGame(String gameName) {
         return super.saveGame(getGameString(gameName));
     }
 
+    /**
+     * method to load a new GameState after the end of a game
+     *
+     * @param gameName
+     * @return
+     */
     @Override
     public GameState loadGame(String gameName){
         String appName = getGameString(gameName);

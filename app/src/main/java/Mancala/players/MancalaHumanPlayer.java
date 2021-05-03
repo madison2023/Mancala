@@ -36,12 +36,15 @@ import static java.lang.Thread.sleep;
 
 /**
  * Enables interaction with the GUI
+ *
  * @author Rachel Madison
  * @author Jordan Nakamura
  * @author Henry Lee
  */
-public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener, CompoundButton.OnCheckedChangeListener {
+public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchListener,
+                CompoundButton.OnCheckedChangeListener {
 
+    // MancalaHumanPlayer instance variables
     private BoardView boardView;
     private TextView whoseTurnTextView;
     private Switch toggleMusic;
@@ -56,6 +59,10 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         super(name);
     }
 
+    /**
+     * method to get topView
+     * @return
+     */
     @Override
     public View getTopView() {
         return myActivity.findViewById(R.id.top_gui_layout);
@@ -90,6 +97,10 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         }
     }
 
+    /**
+     * method to initalize UI
+     * @param activity
+     */
     @Override
     public void setAsGui(GameMainActivity activity) {
         //like oncreate
@@ -133,11 +144,16 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
         return true;
     }
 
-
+    /**
+     * method to perform any initialization that needs to be done after the player
+     * knows what their game-position and opponents' names are.
+     */
     @Override
     protected void initAfterReady() {
+        // do any action in the super class first
         super.initAfterReady();
 
+        // set player positions with Human Player on the bottom and Computer Player on top
         MancalaGameState gameState = (MancalaGameState) game.getGameState();
         gameState.setPlayerBottom(playerNum);
         gameState.setWhoseTurn(playerNum);
@@ -150,13 +166,20 @@ public class MancalaHumanPlayer extends GameHumanPlayer implements View.OnTouchL
 
     }
 
-    // perform action after the Game is over
+    /**
+     * method to perform action after the Game is over
+     */
     @Override
     protected void afterGameOver() {
         // stop music after game is over
         mp2.stop();
     }
 
+    /**
+     * switch listener on the change event
+     * @param compoundButton
+     * @param isChecked
+     */
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
         if (isChecked && !mp2.isPlaying()){

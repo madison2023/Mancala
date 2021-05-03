@@ -9,11 +9,16 @@ import Mancala.MancalaGameState;
 import Mancala.MancalaMoveAction;
 
 /**
+ * Dumb AI for Mancala game. Randomly selects a pit with marbles on its row.
+ * If pit is empty, will continue to randomly select pits until it finds a pit with marbles.
+ *
  * @author Henry Lee
  */
 public class MancalaDumbComputerPlayer extends GameComputerPlayer {
 
+    // generate random number
     protected Random gen = new Random();
+
     /**
      * constructor
      *
@@ -23,10 +28,16 @@ public class MancalaDumbComputerPlayer extends GameComputerPlayer {
         super(name);
     }
 
+    /**
+     * receive GameState and process information
+     */
     @Override
     protected void receiveInfo(GameInfo info) {
+
+        // create new state by copy
         MancalaGameState dumbCompState = new MancalaGameState((MancalaGameState) info);
 
+        // test if current player is the dumb computer player. If not return
         if (dumbCompState.getWhoseTurn() != this.playerNum) {
             return;
         } else {

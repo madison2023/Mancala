@@ -21,16 +21,19 @@ import java.util.ArrayList;
 
 /**
  * A surface view that has the board and marbles drawn on it
+ *
  * @author Jordan Nakamura
  * @author Henry Lee
  * @author Rachel Madison
  */
 public class BoardView extends SurfaceView {
 
+    // instance size variables of the board, pocket size, and marble size
     private final static float BORDER_PERCENT = 5;
     private final static float POCKET_SIZE_PERCENT = 1.5f;
     private final static float MARBLE_SIZE_PERCENT = 0.5f;
 
+    // instance variables for marbles
     private final Bitmap redMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_red);
     private final Bitmap greenMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_green);
     private final Bitmap blueMarble = BitmapFactory.decodeResource(getResources(), R.drawable.marble_blue);
@@ -73,6 +76,9 @@ public class BoardView extends SurfaceView {
     private int player0Score;
     private int player1Score;
 
+    /**
+     *  set colors for the board and marbles
+     */
     public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setWillNotDraw(false);
@@ -96,28 +102,45 @@ public class BoardView extends SurfaceView {
 
     }
 
-    //draws random marble (red, green, or blue)
+    /**
+     * draws random marble (red, green, or blue)
+     * @param cx
+     * @param cy
+     * @param canvas
+     */
     public void drawMarble(float cx, float cy, Canvas canvas){
         Bitmap scaledMarble;
         float random = (float)Math.random();
 
         if(random < 0.33f){
-            scaledMarble = Bitmap.createScaledBitmap(redMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),false);
+            scaledMarble = Bitmap.createScaledBitmap(redMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),
+                    false);
         } else if(random > 0.67){
-            scaledMarble = Bitmap.createScaledBitmap(greenMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),false);
+            scaledMarble = Bitmap.createScaledBitmap(greenMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),
+                    false);
         } else {
-            scaledMarble = Bitmap.createScaledBitmap(blueMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),false);
+            scaledMarble = Bitmap.createScaledBitmap(blueMarble,(int)p(MARBLE_SIZE_PERCENT),(int)p(MARBLE_SIZE_PERCENT),
+                    false);
         }
 
-        canvas.drawBitmap(scaledMarble,cx - ((int)p(MARBLE_SIZE_PERCENT)/2),cy - ((int)p(MARBLE_SIZE_PERCENT)/2),black);
+        canvas.drawBitmap(scaledMarble,cx - ((int)p(MARBLE_SIZE_PERCENT)/2),cy - ((int)p(MARBLE_SIZE_PERCENT)/2),
+                black);
     }
 
-    //draws marbles for each pit
-    //all same distance from center of pit
+    /**
+     * draws marbles for each pits all same distance from center of pit
+     * @param cx
+     * @param cy
+     * @param numMarbles
+     * @param canvas
+     * @param isTopRow
+     */
     public void drawPitMarbles(float cx, float cy, int numMarbles, Canvas canvas, boolean isTopRow) {
 
-        float textCyTopRow = ((v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + v(BORDER_PERCENT*4)) / 2;
-        float textCyBottomRow = ((v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + (v(100 - (BORDER_PERCENT*4)))) / 2;
+        float textCyTopRow = ((v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) -
+                v(BORDER_PERCENT*4))/10)) + v(BORDER_PERCENT*4)) / 2;
+        float textCyBottomRow = ((v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) -
+                v(BORDER_PERCENT*4))/10)) + (v(100 - (BORDER_PERCENT*4)))) / 2;
 
         float radius = p(POCKET_SIZE_PERCENT)/2; //= 50.0f;
         double angle = 0.0;
@@ -136,15 +159,25 @@ public class BoardView extends SurfaceView {
 
     }
 
-    //spreads marbles out more since more marbles will be in the 2 stores at either end
-    //uses random arrangement instead of circular
+    /**
+     * spreads marbles out more since more marbles will be in the 2 stores at either end
+     * uses random arrangement instead of circular
+     * @param cx
+     * @param cy
+     * @param numMarbles
+     * @param canvas
+     * @param isLeft
+     */
     public void drawStoreMarbles(float cx, float cy, int numMarbles, Canvas canvas, boolean isLeft) {
         //coordinates for text
-        float textCxLeftStore = (h(BORDER_PERCENT) + h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
-        float textCxRightStore = (h(100 - BORDER_PERCENT) + h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
+        float textCxLeftStore = (h(BORDER_PERCENT) + h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) -
+                h(BORDER_PERCENT))/45))/2;
+        float textCxRightStore = (h(100 - BORDER_PERCENT) + h(100 - BORDER_PERCENT)-
+                ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45))/2;
 
         float radius = (h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f)
-                - h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f))/2 - (p(MARBLE_SIZE_PERCENT) + 2f)*4; //4 times marble radius is making sure it doesnt get drawn on the edge
+                - h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f))/2 - (p(MARBLE_SIZE_PERCENT)
+                + 2f)*4; //4 times marble radius is making sure it doesnt get drawn on the edge
         double angle = 0.0;
 
         int numMarblesToAdd = 0;
@@ -178,7 +211,13 @@ public class BoardView extends SurfaceView {
         }
     }
 
-    //draw the number
+    /**
+     * draw the number
+     * @param cx
+     * @param cy
+     * @param numMarbles
+     * @param canvas
+     */
     public void drawMarblesNumber(float cx, float cy, int numMarbles, Canvas canvas){
         String numberStr = new Integer(numMarbles).toString();
         canvas.drawText(numberStr, cx, cy + 5f, number);
@@ -195,51 +234,84 @@ public class BoardView extends SurfaceView {
         canvas.drawCircle(cx ,cy, radius - 5, lightBrown);
     }
 
+    /**
+     * method to draw which player's turn
+     * @param canvas
+     * @param isComputersTurn
+     */
     public void drawTurnName(Canvas canvas, boolean isComputersTurn) {
         if (isComputersTurn) {
-            canvas.drawText("Computer's Turn", h(BORDER_PERCENT) + (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/2, v(100 - (BORDER_PERCENT*4)) + 100, text);
+            canvas.drawText("Computer's Turn", h(BORDER_PERCENT) + (h(100 - BORDER_PERCENT) -
+                    h(BORDER_PERCENT))/2, v(100 - (BORDER_PERCENT*4)) + 100, text);
         }
         else {
-            canvas.drawText("Your Turn", h(BORDER_PERCENT) + (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/2, v(100 - (BORDER_PERCENT*4)) + 100, text);
+            canvas.drawText("Your Turn", h(BORDER_PERCENT) + (h(100 - BORDER_PERCENT) -
+                    h(BORDER_PERCENT))/2, v(100 - (BORDER_PERCENT*4)) + 100, text);
         }
     }
 
-
-
-    /** onDraw method draws the game board and pockets. */
+    /**
+     * onDraw method draws the game board and pockets.
+     * @param canvas
+     */
     public void onDraw(Canvas canvas){
 
         setPoints();
 
-        /*// pocket circle radius
-        float radius = 90f;*/
-
         //centers of stores
-        float cxLeftStore = ((h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 45)) + (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 7))) / 2;
-        float cxRightStore = ((h(100 - BORDER_PERCENT) - ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 45)) + (h(100 - BORDER_PERCENT) - (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 7)) / 2;
+        float cxLeftStore = ((h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 45)) +
+                (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 7))) / 2;
+
+        float cxRightStore = ((h(100 - BORDER_PERCENT) - ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 45)) +
+                (h(100 - BORDER_PERCENT) - (h(100 - BORDER_PERCENT) - h(BORDER_PERCENT)) / 7)) / 2;
+
         float cyStore = (cyA + cyB) / 2;
 
-        canvas.drawRect(h(BORDER_PERCENT) - 10,v(BORDER_PERCENT*4) - 10,h(100 - BORDER_PERCENT) + 10, v(100 - (BORDER_PERCENT*4)) + 10, black);
-        canvas.drawRect(h(BORDER_PERCENT),v(BORDER_PERCENT*4),h(100 - BORDER_PERCENT), v(100 - (BORDER_PERCENT*4)), brown);
+        canvas.drawRect(h(BORDER_PERCENT) - 10,v(BORDER_PERCENT*4) - 10,
+                h(100 - BORDER_PERCENT) + 10, v(100 - (BORDER_PERCENT*4)) + 10, black);
+
+        canvas.drawRect(h(BORDER_PERCENT),v(BORDER_PERCENT*4),h(100 - BORDER_PERCENT),
+                v(100 - (BORDER_PERCENT*4)), brown);
 
         // Draws left oval
-        canvas.drawOval(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), black);
-        canvas.drawOval(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), lightBrown);
+        canvas.drawOval(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45),
+                v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10),
+                h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7),
+                v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) -
+                        v(BORDER_PERCENT*4))/10), black);
+
+        canvas.drawOval(h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f),
+                v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9),
+                h(BORDER_PERCENT)+((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f),
+                v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) -
+                        v(BORDER_PERCENT*4))/9), lightBrown);
 
         // Draws right oval
-        canvas.drawOval(h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10), black);
-        canvas.drawOval(h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f), v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f), v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9), lightBrown);
+        canvas.drawOval(h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/45),
+                v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10),
+                h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7),
+                v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) -
+                        v(BORDER_PERCENT*4))/10), black);
+
+        canvas.drawOval(h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/40f),
+                v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/9),
+                h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7.18f),
+                v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) -
+                        v(BORDER_PERCENT*4))/9), lightBrown);
 
         for(int i = 1; i <= 6; i++){
             float a = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7));
             float b = (h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7));
             // Draws top row of pockets
             float cx = a / 1.55f + (i * 1.2f * (b - a)) / 7f;
-            float cyTop = (v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + p(POCKET_SIZE_PERCENT);
+            float cyTop = (v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) -
+                    v(BORDER_PERCENT*4))/10)) + p(POCKET_SIZE_PERCENT);
             drawPocket(canvas, cx, cyTop, p(POCKET_SIZE_PERCENT));
 
             // Draws bottom row of pockets
-            float cyBottom = (v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) - p(POCKET_SIZE_PERCENT);
+            float cyBottom = (v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) -
+                    v(BORDER_PERCENT*4))/10)) - p(POCKET_SIZE_PERCENT);
+
             drawPocket(canvas, cx, cyBottom, p(POCKET_SIZE_PERCENT));
         }
 
@@ -271,15 +343,6 @@ public class BoardView extends SurfaceView {
 
         //store marbles for player B
         drawStoreMarbles(cxLeftStore, cyStore, player1[6], canvas, true);
-
-        //draw Text that says whose turn it is
-        /*if (state.getWhoseTurn() == 0) {
-            drawTurnName(canvas, false); //need to change this so that it doesn't rely on human always being player 0
-        }
-        else {
-            drawTurnName(canvas, true);
-        }*/
-        //canvas.drawText(state.getPlayerName() +"'s Turn", boardOuterLeft + boardWidth/2, boardOuterBottom + 100, text);
     }
 
 
@@ -293,24 +356,65 @@ public class BoardView extends SurfaceView {
         return (x - cx) * (x - cx) + (y - cy) * (y - cy) <= p(POCKET_SIZE_PERCENT)*p(POCKET_SIZE_PERCENT);
     }
 
+    /**
+     * method to set the board pockets
+     */
     public void setPoints(){
-        cxA1 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (1 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxA2 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (2 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxA3 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (3 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxA4 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (4 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxA5 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (5 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxA6 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (6 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        //y for all of the A pockets
-        cyA = (v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) - p(POCKET_SIZE_PERCENT);
+        cxA1 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (1 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
 
-        cxB1 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (6 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxB2 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (5 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxB3 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (4 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxB4 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (3 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxB5 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (2 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
-        cxB6 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (1 * 1.2f * ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) - (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+        cxA2 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (2 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxA3 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (3 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxA4 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (4 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxA5 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (5 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxA6 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (6 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        //y for all of the A pockets
+        cyA = (v(100 - (BORDER_PERCENT*4))-((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10))
+                - p(POCKET_SIZE_PERCENT);
+
+        cxB1 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (6 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxB2 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (5 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxB3 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (4 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxB4 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (3 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxB5 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (2 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
+        cxB6 = (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) / 1.55f + (1 * 1.2f *
+                ((h(100 - BORDER_PERCENT)-((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)) -
+                        (h(BORDER_PERCENT) + ((h(100 - BORDER_PERCENT) - h(BORDER_PERCENT))/7)))) / 7f;
+
         // y for all the B pockets
-        cyB = (v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) + p(POCKET_SIZE_PERCENT);
+        cyB = (v(BORDER_PERCENT*4)+((v(100 - (BORDER_PERCENT*4)) - v(BORDER_PERCENT*4))/10)) +
+                p(POCKET_SIZE_PERCENT);
     }
 
     public Point mapPixelToPit(float x, float y) {

@@ -1,11 +1,11 @@
 package Mancala;
 
-
-
 import com.example.mancala.game.GameFramework.players.GamePlayer;
 import com.example.mancala.game.GameFramework.actionMessage.GameAction;
 
 /**
+ * Creates the action of moving marbles
+ *
  * @author Henry Lee
  */
 public class MancalaMoveAction extends GameAction{
@@ -25,10 +25,12 @@ public class MancalaMoveAction extends GameAction{
         this.col = col;
     }
 
+    // gets the board row
     public int getRow() {
         return row;
     }
 
+    // gets the board column
     public int getCol(){
         return col;
     }

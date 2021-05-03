@@ -13,6 +13,13 @@ import Mancala.MancalaGameState;
 import Mancala.MancalaLocalGame;
 import Mancala.MancalaMainActivity;
 
+/**
+ * Tests for the Mancala game
+ *
+ * @author Rachel Madison
+ * @author Jordan Nakamura
+ * @author Henry Lee
+ */
 @RunWith(RobolectricTestRunner.class)
 public class MancalaTests {
     public MancalaMainActivity activity;
@@ -22,7 +29,10 @@ public class MancalaTests {
         activity = Robolectric.buildActivity(MancalaMainActivity.class).create().resume().get();
     }
 
-
+    /**
+     * Tests that the copy constructor works when given a empty MancalaGameState
+     * @author Henry Lee
+     */
     @Test
     public void test_CopyConstructorOfState_Empty(){
         MancalaGameState MancalaState = new MancalaGameState();
@@ -30,7 +40,7 @@ public class MancalaTests {
         assertTrue("Copy Constructor did not produce equal States", MancalaState.equals(copyState));
     }
 
-    /*
+    /**
     * Tests that the copy constructor works when given a full MancalaGameState
     * @author Rachel Madison
     * */
@@ -64,6 +74,10 @@ public class MancalaTests {
         assertEquals(player1[2],0);
     }
 
+    /**
+     * Tests the selectPit method in MancalaGameState
+     * @author Henry Lee
+     */
     @Test
     public void selectPit(){
         MancalaGameState MancalaState = new MancalaGameState();
@@ -77,6 +91,10 @@ public class MancalaTests {
         assertEquals(4,player0[5]);
     }
 
+    /**
+     * Tests the addMarblesToPlayer0 method in the MancalaGameState
+     * @author Jordan Nakamura
+     */
     @Test
     public void addMarblesToPlayer0() {
         MancalaGameState MancalaState = new MancalaGameState();
@@ -88,6 +106,10 @@ public class MancalaTests {
         assertEquals(1,player0[6]);
     }
 
+    /**
+     * Tests the addMarblesToPlayer1 method in the MancalaGameState
+     * @author Jordan Nakamura
+     */
     @Test
     public void addMarblesToPlayer1() {
         MancalaGameState MancalaState = new MancalaGameState();

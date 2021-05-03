@@ -8,6 +8,7 @@ import java.util.Arrays;
 /**
  * Has the state of a Mancala game, contains information about where the marbles are,
  * the player's score, where the last marble landed, etc
+ *
  * @author Rachel Madison
  * @author Henry Lee
  * @author Jordan Nakamura
@@ -26,8 +27,9 @@ public class MancalaGameState extends GameState implements Serializable  {
     private int playerBottom;
     private int playerTop;
 
-
-    //constructor for objects of class MancalaGameState
+    /**
+     * constructor for objects of class MancalaGameState
+     */
     public MancalaGameState() {
         //initializing the number of marbles in each pocket
         player0 = new int[7];
@@ -42,7 +44,10 @@ public class MancalaGameState extends GameState implements Serializable  {
 
     }
 
-    //copy Constructor
+    /**
+     * copy Constructor
+     * @param original
+     */
     public MancalaGameState(MancalaGameState original)
     {
         player0 = new int[7];
@@ -62,17 +67,16 @@ public class MancalaGameState extends GameState implements Serializable  {
 
     }
 
+    /**
+     * toString method
+     * @return
+     */
     @Override
     public String toString(){
         return "\nComputer Player's Pockets: " + Arrays.toString(player1) + "\nHuman Player's Pockets: "
                 + Arrays.toString(player0) + "Whose turn: " + whoseTurn + "\nLast Column: "
                     + lastCol + "\nLast Row: " + lastRow + "\nPlayerBottom: " + playerBottom + "\nPlayerTop: " + playerTop;
     }
-
-
-
-
-
 
     /**
      * the player selects a pit/pocket and then the pieces are moved according to the rules of the game
@@ -163,8 +167,12 @@ public class MancalaGameState extends GameState implements Serializable  {
      *
      */
     public void capture(int row, int col) {
-        int oppRow = 1 - row; //opponents row that we are capturing from
-        int oppCol = Math.abs(col - 5); //opponents column
+        //opponents row that we are capturing from
+        int oppRow = 1 - row;
+
+        //opponents column
+        int oppCol = Math.abs(col - 5);
+
         if (oppRow == 0) {
             int marbles = player0[oppCol];
             player0[oppCol] = 0;
@@ -188,13 +196,12 @@ public class MancalaGameState extends GameState implements Serializable  {
         if(! (object instanceof MancalaGameState)) return false;
         MancalaGameState state = (MancalaGameState) object;
 
-
-        for(int i = 0; i< this.player0.length; i++){ //player0.length and player1.length will always be the same
+        //player0.length and player1.length will always be the same
+        for(int i = 0; i< this.player0.length; i++){
             if (this.player0[i] != state.player0[i] || this.player1[i] != state.player1[i]){
                 return false;
             }
         }
-
 
         if (this.whoseTurn != state.whoseTurn || this.lastRow != state.lastRow || this.lastCol != state.lastCol
             || this.playerTop != state.playerTop || this.playerBottom != state.playerBottom) {
